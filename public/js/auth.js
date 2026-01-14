@@ -252,14 +252,12 @@ async function handleProfileSubmit(event) {
       photoUrl = await uploadProfilePhoto(photoInput.files[0], connectedWallet);
     }
 
-    // Create user in database
+    // Create user in database (using wallet_address as unique identifier)
     const userData = {
-      privy_user_id: `phantom_${connectedWallet}`,
       username: username,
       bio: bio,
       profile_photo_url: photoUrl,
       wallet_address: connectedWallet,
-      email: null,
       created_at: new Date().toISOString()
     };
 
