@@ -117,13 +117,13 @@ const MARKETS = [
 
 export default function MarketsPage() {
   return (
-    <div className="min-h-screen bg-[#F8F9FC]">
+    <div className="min-h-screen bg-white">
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2" style={{ fontFamily: "'Clash Display', sans-serif" }}>
+          <h1 className="font-display text-4xl text-gray-900 mb-2">
             Markets
           </h1>
           <p className="text-gray-600">
@@ -175,7 +175,7 @@ export default function MarketsPage() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-[#F8F9FC] py-8 border-t border-gray-200 mt-12">
+      <footer className="py-8 border-t border-gray-100 mt-12">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-6">

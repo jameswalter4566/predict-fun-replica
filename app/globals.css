@@ -1,54 +1,202 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Import Geist font - similar to what predict.fun uses */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 :root {
-  --predict-blue: #5B5FED;
-  --predict-red: #FF6B6B;
-  --predict-bg: #F8F9FC;
+  /* predict.fun color system */
+  --interactive-03: rgb(110, 87, 249);
+  --link-01: rgb(110, 87, 249);
+  --text-01: rgb(31, 42, 55);
+  --text-03: rgb(108, 115, 127);
+  --text-disabled: rgb(157, 164, 174);
+  --ui-bg: #ffffff;
+  --border-01: rgba(0, 0, 0, 0.078);
+
+  /* Status colors */
+  --support-success: rgb(17, 162, 77);
+  --support-error: #f04438;
+  --text-pos: #4589ff;
+  --text-neg: #fa4d56;
+
+  /* Shadows */
+  --shadow-card: 0 8px 16px 0 rgba(0,0,0,0.04);
+  --shadow-boosted: 0 2px 6px 0 rgba(0,0,0,0.24);
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
-  background-color: var(--predict-bg);
-  font-family: 'Inter', sans-serif;
+  background-color: var(--ui-bg);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--text-01);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+/* Display font for headings */
 .font-display {
-  font-family: 'Clash Display', 'Inter', sans-serif;
+  font-family: 'Georgia', 'Times New Roman', serif;
   font-weight: 700;
 }
 
-/* Market card styles */
+/* Rounded corners matching predict.fun */
+.rounded-button {
+  border-radius: 12px;
+}
+
+.rounded-container {
+  border-radius: 16px;
+}
+
+.rounded-mini {
+  border-radius: 8px;
+}
+
+/* Shadow classes */
+.shadow-card {
+  box-shadow: var(--shadow-card);
+}
+
+.shadow-purple-subtle {
+  box-shadow: 0 4px 12px rgba(110, 87, 249, 0.15);
+}
+
+/* Button styles */
+.btn-yes {
+  @apply px-3 py-1.5 rounded-lg text-sm font-semibold transition-all;
+  background-color: rgba(69, 137, 255, 0.1);
+  color: #4589ff;
+  border: 1px solid rgba(69, 137, 255, 0.2);
+}
+
+.btn-yes:hover {
+  background-color: rgba(69, 137, 255, 0.2);
+}
+
+.btn-no {
+  @apply px-3 py-1.5 rounded-lg text-sm font-semibold transition-all;
+  background-color: rgba(250, 77, 86, 0.1);
+  color: #fa4d56;
+  border: 1px solid rgba(250, 77, 86, 0.2);
+}
+
+.btn-no:hover {
+  background-color: rgba(250, 77, 86, 0.2);
+}
+
+/* Primary button */
+.btn-primary {
+  @apply px-5 py-2.5 rounded-full font-semibold transition-all;
+  background-color: var(--text-01);
+  color: white;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+/* Interactive/purple button */
+.btn-interactive {
+  @apply px-5 py-2.5 rounded-full font-semibold transition-all;
+  background-color: var(--interactive-03);
+  color: white;
+}
+
+/* Market card */
 .market-card {
-  @apply bg-white rounded-2xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow;
+  @apply bg-white p-4 transition-shadow;
+  border-radius: 16px;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border-01);
 }
 
-.yes-btn {
-  @apply px-3 py-1 rounded-md text-sm font-medium bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors;
+.market-card:hover {
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
 }
 
-.no-btn {
-  @apply px-3 py-1 rounded-md text-sm font-medium bg-red-50 text-red-600 hover:bg-red-100 transition-colors;
+/* Featured market gradient */
+.featured-gradient {
+  background: linear-gradient(135deg, #fef3f2 0%, #fef7f0 25%, #fefce8 50%, #f0fdf4 75%, #eff6ff 100%);
 }
 
-/* Torn paper effect */
-.torn-paper {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 1440 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,50 Q30,30 60,50 T120,50 T180,50 T240,50 T300,50 T360,50 T420,50 T480,50 T540,50 T600,50 T660,50 T720,50 T780,50 T840,50 T900,50 T960,50 T1020,50 T1080,50 T1140,50 T1200,50 T1260,50 T1320,50 T1380,50 T1440,50 L1440,100 L0,100 Z' fill='%23F8F9FC'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-size: 100% auto;
+/* Live section dark bg */
+.live-section-bg {
+  background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+}
+
+/* Stats section purple bg */
+.stats-section-bg {
+  background: linear-gradient(135deg, rgb(110, 87, 249) 0%, rgb(139, 92, 246) 100%);
+}
+
+/* Points badge */
+.points-badge {
+  @apply px-3 py-1 rounded-full text-sm font-semibold;
+  background-color: #fbbf24;
+  color: #1f2937;
+}
+
+/* Outcome row */
+.outcome-row {
+  @apply flex items-center gap-2 py-2 px-3 rounded-lg transition-colors;
+  background-color: #f9fafb;
+  border: 1px solid transparent;
+}
+
+.outcome-row:hover {
+  background-color: #f3f4f6;
+  border-color: var(--border-01);
+}
+
+/* Live indicator */
+.live-dot {
+  @apply w-2 h-2 rounded-full;
+  background-color: var(--support-success);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 /* Carousel dots */
 .carousel-dot {
-  @apply w-2 h-2 rounded-full transition-colors;
+  @apply w-2 h-2 rounded-full transition-colors cursor-pointer;
 }
 
 .carousel-dot.active {
-  @apply bg-blue-600;
+  background-color: var(--interactive-03);
 }
 
 .carousel-dot:not(.active) {
-  @apply bg-gray-300;
+  background-color: #d1d5db;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
 }
