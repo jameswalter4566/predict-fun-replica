@@ -6,61 +6,264 @@
   <title>Predict | The BNB-native Prediction Market</title>
   <link rel="stylesheet" href="https://predict.fun/_next/static/css/70609b1a93ff2867.css">
   <style>
-    /* Root CSS Variables from predict.fun */
+    /* Root CSS Variables - exact match from predict.fun */
     :root {
       --ui-bg: #ffffff;
       --text-01: 31 42 55;
-      --text-02: 75 85 99;
+      --text-02: 56 66 80;
       --text-03: 108 115 127;
       --text-disabled: 157 164 174;
       --border-01: #00000014;
-      --interactive-01: #1f2937;
-      --interactive-02: #f3f4f6;
-      --interactive-03: rgb(110, 87, 249);
-      --link-01: rgb(110, 87, 249);
-      --support-success: rgb(17, 162, 77);
-      --support-error: #f04438;
-      --support-warning: rgb(254, 200, 75);
-      --text-pos: #4589ff;
-      --text-neg: #fa4d56;
+      --interactive-01: 17 25 39;
+      --interactive-02: #00000014;
+      --interactive-03: 110 87 249;
+      --accent-green: 42 165 26;
+      --accent-green-subtle: 233 255 230;
+      --accent-red: 240 68 56;
+      --accent-red-subtle: #fa4d561a;
+      --neg-bg: 240 68 56;
+      --neg-subtle: #fa4d561a;
+      --pos-bg: 69 137 255;
+      --pos-subtle: #4589ff1a;
+      --field-01: #00000014;
+      --focus: #a56eff;
+      --hover-ui: #0000000a;
     }
+
+    html {
+      font-family: Geist, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --tw-numeric-figure: lining-nums;
+      --tw-numeric-spacing: tabular-nums;
+    }
+
     body {
-      font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background-color: var(--ui-bg);
       color: rgb(var(--text-01));
       margin: 0;
-      padding: 0;
+      line-height: inherit;
       -webkit-font-smoothing: antialiased;
     }
+
     .font-display {
       font-family: 'Gooper', Georgia, serif;
       font-weight: 700;
     }
+
+    /* Border radius classes - exact values */
+    .rounded-button { border-radius: 12px; }
+    .rounded-container { border-radius: 16px; }
+    .rounded-dialog { border-radius: 24px; }
+
+    /* Square dot tile pattern for cards */
+    .square-dot-tile {
+      position: relative;
+    }
+    .square-dot-tile::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: url("/images/dot-tile.png") 0px 0px / 12px repeat;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Market card gradient background */
+    .market-card {
+      background: linear-gradient(rgb(244, 243, 255), rgb(255, 255, 255));
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 24px;
+      overflow: hidden;
+    }
+
+    /* YES button styling - green variant */
+    .btn-yes {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+      height: 32px;
+      min-width: 84px;
+      padding: 0 12px;
+      border-radius: 12px;
+      border: 2px solid rgba(42, 165, 26, 0.7);
+      border-bottom-width: 4px;
+      background-color: rgb(233, 255, 230);
+      color: rgb(42, 165, 26);
+      transition: all 0.15s;
+      cursor: pointer;
+    }
+    .btn-yes:hover {
+      opacity: 0.95;
+    }
+    .btn-yes:active {
+      transform: translateY(2px);
+      border-color: transparent;
+    }
+
+    /* NO button styling - red variant */
+    .btn-no {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+      height: 32px;
+      min-width: 84px;
+      padding: 0 12px;
+      border-radius: 12px;
+      border: 2px solid rgba(240, 68, 56, 0.7);
+      border-bottom-width: 4px;
+      background-color: rgba(250, 77, 86, 0.1);
+      color: rgb(240, 68, 56);
+      transition: all 0.15s;
+      cursor: pointer;
+    }
+    .btn-no:hover {
+      opacity: 0.95;
+    }
+    .btn-no:active {
+      transform: translateY(2px);
+      border-color: transparent;
+    }
+
+    /* Small YES/NO buttons in market rows */
+    .btn-yes-sm {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+      height: 32px;
+      padding: 0 12px;
+      border-radius: 12px;
+      border: 2px solid rgba(42, 165, 26, 0.7);
+      border-bottom-width: 4px;
+      background-color: rgb(233, 255, 230);
+      color: rgb(42, 165, 26);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn-no-sm {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+      height: 32px;
+      padding: 0 12px;
+      border-radius: 12px;
+      border: 2px solid rgba(240, 68, 56, 0.7);
+      border-bottom-width: 4px;
+      background-color: rgba(250, 77, 86, 0.1);
+      color: rgb(240, 68, 56);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    /* Featured market title gradient text */
+    .purple-text {
+      background: linear-gradient(90deg, rgb(164, 140, 248), rgb(106, 99, 250));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Field/input background */
+    .bg-field-01 {
+      background-color: rgba(0, 0, 0, 0.08);
+    }
+
+    /* Badge styling */
+    .badge-purple {
+      background: rgba(110, 87, 249, 0.1);
+      color: rgb(110, 87, 249);
+    }
+
+    /* Points badge - yellow */
+    .badge-points {
+      background: rgb(254, 240, 138);
+      color: rgb(113, 63, 18);
+    }
+
+    /* Market row styling */
+    .market-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.02);
+    }
+
+    /* Animated pulse for live indicator */
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    /* Card content z-index to be above dot pattern */
+    .card-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Icon button */
+    .icon-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      color: rgb(var(--text-03));
+    }
+    .icon-btn:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    /* Sheen animation border */
+    .sheen-border {
+      position: relative;
+      overflow: hidden;
+    }
+    .sheen-border::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, rgba(110, 87, 249, 0.6), rgb(110, 87, 249), rgba(110, 87, 249, 0.6));
+      border-radius: inherit;
+      z-index: -1;
+    }
   </style>
 </head>
-<body class="light min-h-dvh bg-ui-bg antialiased">
+<body class="min-h-dvh antialiased">
   <!-- Navigation -->
-  <nav class="relative z-50 mx-auto max-w-screen-xl border-b border-b-border-01 bg-ui-bg lg:border-b-transparent">
+  <nav class="relative z-50 mx-auto max-w-screen-xl border-b border-b-transparent">
     <div class="grid h-14 grid-cols-[auto_minmax(0,_1fr)] items-center gap-8 px-4 lg:grid-cols-[auto_auto_minmax(0,_1fr)]">
       <a href="/" class="flex items-center gap-1">
-        <span class="text-2xl font-bold text-text-01">predict</span>
-        <span class="rounded bg-gray-200 px-1 py-0.5 text-[10px] font-medium text-gray-600 -mt-3">beta</span>
+        <span class="text-2xl font-bold" style="color: rgb(var(--text-01));">predict</span>
+        <span class="rounded px-1 py-0.5 text-[10px] font-medium -mt-3" style="background: rgba(0,0,0,0.06); color: rgb(var(--text-03));">beta</span>
       </a>
       <div class="hidden lg:flex items-center gap-6">
-        <a href="/markets" class="text-sm font-medium text-text-03 hover:text-text-01">Markets</a>
-        <a href="#" class="px-3 py-1 bg-yellow-400 rounded-full text-sm font-semibold text-gray-900">Points</a>
-        <a href="#" class="text-sm font-medium text-text-03 hover:text-text-01">Invite</a>
+        <a href="/markets" class="text-sm font-medium" style="color: rgb(var(--text-03));">Markets</a>
+        <a href="#" class="badge-points px-3 py-1 rounded-full text-sm font-semibold">Points</a>
+        <a href="#" class="text-sm font-medium" style="color: rgb(var(--text-03));">Invite</a>
       </div>
       <div class="flex items-center justify-end gap-4">
-        <div class="hidden lg:flex items-center gap-2 px-3 py-1.5 bg-gray-100 rounded-full">
-          <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="hidden lg:flex items-center gap-2 px-3 py-1.5 bg-field-01 rounded-full cursor-pointer">
+          <svg class="w-4 h-4" style="color: rgb(var(--text-03));" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
           </svg>
-          <input type="text" placeholder="Search markets..." class="bg-transparent border-none outline-none text-sm w-24">
-          <kbd class="text-xs text-gray-400 bg-white px-1.5 py-0.5 rounded border">Shift + /</kbd>
+          <span class="text-sm" style="color: rgb(var(--text-03));">Search markets...</span>
+          <kbd class="text-xs px-1.5 py-0.5 rounded border" style="background: white; color: rgb(var(--text-03)); border-color: rgba(0,0,0,0.1);">Shift + /</kbd>
         </div>
-        <button class="text-sm font-medium text-text-03 hover:text-text-01">Log In</button>
-        <button class="px-4 py-2 bg-gray-900 text-white rounded-full text-sm font-medium">Sign Up</button>
+        <button class="text-sm font-medium" style="color: rgb(var(--text-03));">Log In</button>
+        <button class="px-4 py-2 rounded-full text-sm font-medium text-white" style="background: rgb(var(--interactive-01));">Sign Up</button>
       </div>
     </div>
   </nav>
@@ -69,36 +272,37 @@
     <!-- Desktop View -->
     <div class="hidden md:block">
       <!-- Featured Market Section -->
-      <div class="lg:px-8">
+      <div class="px-4 lg:px-8 pt-4">
         <div class="mx-auto max-w-screen-xl">
-          <div class="rounded-container overflow-hidden" style="background: linear-gradient(135deg, #fef3f2 0%, #fef7f0 25%, #fefce8 50%, #f0fdf4 75%, #eff6ff 100%);">
-            <div class="grid md:grid-cols-2 gap-8 p-8 lg:p-12">
+          <div class="square-dot-tile market-card overflow-hidden">
+            <div class="card-content grid md:grid-cols-2 gap-8 p-6 lg:p-10">
               <div>
                 <div class="flex items-center gap-3 mb-4">
-                  <span class="text-xs font-semibold px-2.5 py-1 rounded-md" style="background: rgba(110, 87, 249, 0.1); color: rgb(110, 87, 249);">Featured Market</span>
-                  <span class="text-sm text-gray-500">Total Vol <span class="font-semibold text-gray-900">$7,561,870</span></span>
+                  <span class="badge-purple text-xs font-semibold px-2.5 py-1 rounded-md">Featured Market</span>
+                  <span class="text-sm" style="color: rgb(var(--text-03));">Total Vol <span class="font-semibold" style="color: rgb(var(--text-01));">$7,562,863</span></span>
                 </div>
-                <h1 class="font-display text-3xl lg:text-5xl leading-tight mb-8" style="color: rgb(110, 87, 249);">
+                <h1 class="font-display text-3xl lg:text-5xl leading-tight mb-8 purple-text">
                   Will Logan Paul's PSA 10 Pokémon Illustrator Sale Price be over $6 million?
                 </h1>
                 <div class="flex gap-4">
-                  <button class="w-[140px] py-3 rounded-xl border-2 border-gray-200 bg-white text-gray-900 font-semibold hover:border-blue-400 hover:bg-blue-50 transition-all">YES</button>
-                  <button class="w-[140px] py-3 rounded-xl border-2 border-gray-200 bg-white font-semibold hover:border-red-400 hover:bg-red-50 transition-all" style="color: #fa4d56;">NO</button>
+                  <button class="btn-yes w-[140px]">YES</button>
+                  <button class="btn-no w-[140px]">NO</button>
                 </div>
                 <div class="flex items-center gap-2 mt-6">
-                  <button class="p-1 hover:bg-gray-200/50 rounded">
-                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                  <button class="icon-btn">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
                   </button>
-                  <div class="w-2 h-2 rounded-full" style="background: rgb(110, 87, 249);"></div>
-                  <div class="w-2 h-2 rounded-full bg-gray-300"></div>
-                  <div class="w-2 h-2 rounded-full bg-gray-300"></div>
-                  <button class="p-1 hover:bg-gray-200/50 rounded">
-                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                  <div class="w-2 h-2 rounded-full" style="background: rgb(var(--interactive-03));"></div>
+                  <div class="w-2 h-2 rounded-full" style="background: rgba(0,0,0,0.2);"></div>
+                  <div class="w-2 h-2 rounded-full" style="background: rgba(0,0,0,0.2);"></div>
+                  <div class="w-2 h-2 rounded-full" style="background: rgba(0,0,0,0.2);"></div>
+                  <button class="icon-btn">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                   </button>
                 </div>
               </div>
               <div class="flex items-center justify-center">
-                <img src="/images/pokemon.png" alt="Pokemon Illustrator Card" class="max-w-full h-auto rounded-xl shadow-lg" style="max-height: 400px;">
+                <img src="/images/pokemon.png" alt="Pokemon Illustrator Card" class="max-w-full h-auto rounded-xl" style="max-height: 380px; filter: drop-shadow(0 25px 50px rgba(0,0,0,0.25));">
               </div>
             </div>
           </div>
@@ -108,354 +312,363 @@
       <!-- Markets Section -->
       <div class="mx-auto max-w-screen-xl px-4 lg:px-8 py-12">
         <div class="mb-8">
-          <h2 class="font-display text-3xl lg:text-4xl text-gray-900 mb-2">Turn Predictions Into Profits</h2>
-          <p class="text-gray-500 max-w-2xl">The BNB-native information market where it pays to be right. Bet on outcomes ranging from sports to politics, and cash in on your correct forecasts.</p>
+          <h2 class="font-display text-3xl lg:text-4xl mb-2" style="color: rgb(var(--text-01));">Turn Predictions Into Profits</h2>
+          <p class="max-w-2xl" style="color: rgb(var(--text-03));">The BNB-native information market where it pays to be right. Bet on outcomes ranging from sports to politics, and cash in on your correct forecasts.</p>
         </div>
 
         <!-- Markets Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <!-- Market Card 1 -->
-          <div class="bg-white rounded-2xl p-4 border border-gray-100" style="box-shadow: 0 8px 16px rgba(0,0,0,0.04);">
-            <div class="flex items-start justify-between gap-3 mb-4">
-              <div class="flex items-start gap-3">
-                <img src="/images/la-rams.png" alt="LA Rams" class="w-10 h-10 rounded-xl object-cover">
-                <h3 class="font-semibold text-gray-900 text-sm">Los Angeles R at Chicago</h3>
-              </div>
-              <div class="flex gap-1">
-                <button class="p-1.5 hover:bg-gray-100 rounded-lg"><svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg></button>
-                <button class="p-1.5 hover:bg-gray-100 rounded-lg"><svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
-              </div>
-            </div>
-            <div class="space-y-2 mb-4">
-              <div class="flex items-center gap-2 py-2 px-3 rounded-lg bg-gray-50">
-                <span class="flex-1 text-sm text-gray-700">Los Angeles R</span>
-                <span class="text-sm font-semibold text-gray-900 w-12 text-right">65%</span>
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-lg" style="background: rgba(69, 137, 255, 0.1); color: #4589ff;">YES</button>
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-lg" style="background: rgba(250, 77, 86, 0.1); color: #fa4d56;">NO</button>
-              </div>
-              <div class="flex items-center gap-2 py-2 px-3 rounded-lg bg-gray-50">
-                <span class="flex-1 text-sm text-gray-700">Chicago</span>
-                <span class="text-sm font-semibold text-gray-900 w-12 text-right">36%</span>
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-lg" style="background: rgba(69, 137, 255, 0.1); color: #4589ff;">YES</button>
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-lg" style="background: rgba(250, 77, 86, 0.1); color: #fa4d56;">NO</button>
-              </div>
-              <div class="flex items-center gap-2 py-2 px-3 rounded-lg bg-gray-50">
-                <span class="flex-1 text-sm text-gray-700">LA R -3.5</span>
-                <span class="text-sm font-semibold text-gray-900 w-12 text-right">50%</span>
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-lg" style="background: rgba(69, 137, 255, 0.1); color: #4589ff;">YES</button>
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-lg" style="background: rgba(250, 77, 86, 0.1); color: #fa4d56;">NO</button>
-              </div>
-            </div>
-            <div class="flex items-center justify-between pt-3 border-t border-gray-100">
-              <div class="flex items-center gap-2">
-                <div class="flex -space-x-1.5">
-                  <div class="w-5 h-5 rounded-full bg-orange-400 border-2 border-white"></div>
-                  <div class="w-5 h-5 rounded-full bg-yellow-400 border-2 border-white"></div>
-                  <div class="w-5 h-5 rounded-full bg-green-400 border-2 border-white"></div>
+          <!-- Market Card 1 - Los Angeles R at Chicago -->
+          <a href="#" class="square-dot-tile market-card block">
+            <div class="card-content p-4">
+              <div class="flex items-start justify-between gap-3 mb-4">
+                <div class="flex items-start gap-3">
+                  <img src="/images/la-rams.png" alt="LA Rams" class="w-10 h-10 rounded-xl object-cover">
+                  <h3 class="font-semibold text-sm" style="color: rgb(var(--text-01));">Los Angeles R at Chicago</h3>
                 </div>
-                <span class="text-xs text-gray-500">+22</span>
+                <div class="flex gap-1">
+                  <button class="icon-btn"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg></button>
+                  <button class="icon-btn"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                </div>
               </div>
-              <div class="flex items-center gap-3 text-xs text-gray-500">
-                <span>↗ $588</span>
-                <span>📅 Jan 18</span>
+              <div class="space-y-2 mb-4">
+                <div class="market-row">
+                  <span class="flex-1 text-sm rounded-button px-3 py-1.5" style="background: white; color: rgb(var(--text-01));">Los Angeles R</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">65%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+                <div class="market-row">
+                  <span class="flex-1 text-sm rounded-button px-3 py-1.5" style="background: white; color: rgb(var(--text-01));">Chicago</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">37%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+                <div class="market-row">
+                  <span class="flex-1 text-sm rounded-button px-3 py-1.5" style="background: white; color: rgb(var(--text-01));">LA R -3.5</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">54%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+              </div>
+              <div class="flex items-center justify-between pt-3 border-t" style="border-color: rgba(0,0,0,0.06);">
+                <div class="flex items-center gap-2">
+                  <div class="flex -space-x-1.5">
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #f97316;"></div>
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #eab308;"></div>
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #22c55e;"></div>
+                  </div>
+                  <span class="text-xs" style="color: rgb(var(--text-03));">+23</span>
+                </div>
+                <div class="flex items-center gap-3 text-xs" style="color: rgb(var(--text-03));">
+                  <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg> $704</span>
+                  <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg> Jan 18</span>
+                </div>
               </div>
             </div>
-          </div>
+          </a>
 
-          <!-- Market Card 2 -->
-          <div class="bg-white rounded-2xl p-4 border border-gray-100" style="box-shadow: 0 8px 16px rgba(0,0,0,0.04);">
-            <div class="flex items-start justify-between gap-3 mb-4">
-              <div class="flex items-start gap-3">
-                <img src="/images/buffalo.png" alt="Buffalo Bills" class="w-10 h-10 rounded-xl object-cover">
-                <h3 class="font-semibold text-gray-900 text-sm">Buffalo at Denver</h3>
-              </div>
-              <div class="flex gap-1">
-                <button class="p-1.5 hover:bg-gray-100 rounded-lg"><svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg></button>
-                <button class="p-1.5 hover:bg-gray-100 rounded-lg"><svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
-              </div>
-            </div>
-            <div class="space-y-2 mb-4">
-              <div class="flex items-center gap-2 py-2 px-3 rounded-lg bg-gray-50">
-                <span class="flex-1 text-sm text-gray-700">Buffalo</span>
-                <span class="text-sm font-semibold text-gray-900 w-12 text-right">52%</span>
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-lg" style="background: rgba(69, 137, 255, 0.1); color: #4589ff;">YES</button>
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-lg" style="background: rgba(250, 77, 86, 0.1); color: #fa4d56;">NO</button>
-              </div>
-              <div class="flex items-center gap-2 py-2 px-3 rounded-lg bg-gray-50">
-                <span class="flex-1 text-sm text-gray-700">Denver</span>
-                <span class="text-sm font-semibold text-gray-900 w-12 text-right">51%</span>
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-lg" style="background: rgba(69, 137, 255, 0.1); color: #4589ff;">YES</button>
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-lg" style="background: rgba(250, 77, 86, 0.1); color: #fa4d56;">NO</button>
-              </div>
-              <div class="flex items-center gap-2 py-2 px-3 rounded-lg bg-gray-50">
-                <span class="flex-1 text-sm text-gray-700">DEN -2.5</span>
-                <span class="text-sm font-semibold text-gray-900 w-12 text-right">44%</span>
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-lg" style="background: rgba(69, 137, 255, 0.1); color: #4589ff;">YES</button>
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-lg" style="background: rgba(250, 77, 86, 0.1); color: #fa4d56;">NO</button>
-              </div>
-            </div>
-            <div class="flex items-center justify-between pt-3 border-t border-gray-100">
-              <div class="flex items-center gap-2">
-                <div class="flex -space-x-1.5">
-                  <div class="w-5 h-5 rounded-full bg-orange-400 border-2 border-white"></div>
-                  <div class="w-5 h-5 rounded-full bg-yellow-400 border-2 border-white"></div>
-                  <div class="w-5 h-5 rounded-full bg-green-400 border-2 border-white"></div>
+          <!-- Market Card 2 - Buffalo at Denver -->
+          <a href="#" class="square-dot-tile market-card block">
+            <div class="card-content p-4">
+              <div class="flex items-start justify-between gap-3 mb-4">
+                <div class="flex items-start gap-3">
+                  <img src="/images/buffalo.png" alt="Buffalo Bills" class="w-10 h-10 rounded-xl object-cover">
+                  <h3 class="font-semibold text-sm" style="color: rgb(var(--text-01));">Buffalo at Denver</h3>
                 </div>
-                <span class="text-xs text-gray-500">+25</span>
+                <div class="flex gap-1">
+                  <button class="icon-btn"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg></button>
+                  <button class="icon-btn"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                </div>
               </div>
-              <div class="flex items-center gap-3 text-xs text-gray-500">
-                <span>↗ $2,617</span>
-                <span>📅 Jan 17</span>
+              <div class="space-y-2 mb-4">
+                <div class="market-row">
+                  <span class="flex-1 text-sm rounded-button px-3 py-1.5" style="background: white; color: rgb(var(--text-01));">Buffalo</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">52%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+                <div class="market-row">
+                  <span class="flex-1 text-sm rounded-button px-3 py-1.5" style="background: white; color: rgb(var(--text-01));">Denver</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">51%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+                <div class="market-row">
+                  <span class="flex-1 text-sm rounded-button px-3 py-1.5" style="background: white; color: rgb(var(--text-01));">DEN -2.5</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">44%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+              </div>
+              <div class="flex items-center justify-between pt-3 border-t" style="border-color: rgba(0,0,0,0.06);">
+                <div class="flex items-center gap-2">
+                  <div class="flex -space-x-1.5">
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #f97316;"></div>
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #eab308;"></div>
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #22c55e;"></div>
+                  </div>
+                  <span class="text-xs" style="color: rgb(var(--text-03));">+25</span>
+                </div>
+                <div class="flex items-center gap-3 text-xs" style="color: rgb(var(--text-03));">
+                  <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg> $2,617</span>
+                  <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg> Jan 17</span>
+                </div>
               </div>
             </div>
-          </div>
+          </a>
 
-          <!-- Market Card 3 -->
-          <div class="bg-white rounded-2xl p-4 border border-gray-100" style="box-shadow: 0 8px 16px rgba(0,0,0,0.04);">
-            <div class="flex items-start justify-between gap-3 mb-4">
-              <div class="flex items-start gap-3">
-                <img src="/images/sf49ers.png" alt="San Francisco 49ers" class="w-10 h-10 rounded-xl object-cover">
-                <h3 class="font-semibold text-gray-900 text-sm">San Francisco at Seattle</h3>
-              </div>
-              <div class="flex gap-1">
-                <button class="p-1.5 hover:bg-gray-100 rounded-lg"><svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg></button>
-                <button class="p-1.5 hover:bg-gray-100 rounded-lg"><svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
-              </div>
-            </div>
-            <div class="space-y-2 mb-4">
-              <div class="flex items-center gap-2 py-2 px-3 rounded-lg bg-gray-50">
-                <span class="flex-1 text-sm text-gray-700">San Francisco</span>
-                <span class="text-sm font-semibold text-gray-900 w-12 text-right">24%</span>
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-lg" style="background: rgba(69, 137, 255, 0.1); color: #4589ff;">YES</button>
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-lg" style="background: rgba(250, 77, 86, 0.1); color: #fa4d56;">NO</button>
-              </div>
-              <div class="flex items-center gap-2 py-2 px-3 rounded-lg bg-gray-50">
-                <span class="flex-1 text-sm text-gray-700">Seattle</span>
-                <span class="text-sm font-semibold text-gray-900 w-12 text-right">75%</span>
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-lg" style="background: rgba(69, 137, 255, 0.1); color: #4589ff;">YES</button>
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-lg" style="background: rgba(250, 77, 86, 0.1); color: #fa4d56;">NO</button>
-              </div>
-              <div class="flex items-center gap-2 py-2 px-3 rounded-lg bg-gray-50">
-                <span class="flex-1 text-sm text-gray-700">SEA -7.5</span>
-                <span class="text-sm font-semibold text-gray-900 w-12 text-right">48%</span>
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-lg" style="background: rgba(69, 137, 255, 0.1); color: #4589ff;">YES</button>
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-lg" style="background: rgba(250, 77, 86, 0.1); color: #fa4d56;">NO</button>
-              </div>
-            </div>
-            <div class="flex items-center justify-between pt-3 border-t border-gray-100">
-              <div class="flex items-center gap-2">
-                <div class="flex -space-x-1.5">
-                  <div class="w-5 h-5 rounded-full bg-orange-400 border-2 border-white"></div>
-                  <div class="w-5 h-5 rounded-full bg-yellow-400 border-2 border-white"></div>
-                  <div class="w-5 h-5 rounded-full bg-green-400 border-2 border-white"></div>
+          <!-- Market Card 3 - San Francisco at Seattle -->
+          <a href="#" class="square-dot-tile market-card block">
+            <div class="card-content p-4">
+              <div class="flex items-start justify-between gap-3 mb-4">
+                <div class="flex items-start gap-3">
+                  <img src="/images/sf49ers.png" alt="San Francisco 49ers" class="w-10 h-10 rounded-xl object-cover">
+                  <h3 class="font-semibold text-sm" style="color: rgb(var(--text-01));">San Francisco at Seattle</h3>
                 </div>
-                <span class="text-xs text-gray-500">+17</span>
+                <div class="flex gap-1">
+                  <button class="icon-btn"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg></button>
+                  <button class="icon-btn"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                </div>
               </div>
-              <div class="flex items-center gap-3 text-xs text-gray-500">
-                <span>↗ $133</span>
-                <span>📅 Jan 17</span>
+              <div class="space-y-2 mb-4">
+                <div class="market-row">
+                  <span class="flex-1 text-sm rounded-button px-3 py-1.5" style="background: white; color: rgb(var(--text-01));">San Francisco</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">24%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+                <div class="market-row">
+                  <span class="flex-1 text-sm rounded-button px-3 py-1.5" style="background: white; color: rgb(var(--text-01));">Seattle</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">75%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+                <div class="market-row">
+                  <span class="flex-1 text-sm rounded-button px-3 py-1.5" style="background: white; color: rgb(var(--text-01));">SEA -7.5</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">48%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+              </div>
+              <div class="flex items-center justify-between pt-3 border-t" style="border-color: rgba(0,0,0,0.06);">
+                <div class="flex items-center gap-2">
+                  <div class="flex -space-x-1.5">
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #f97316;"></div>
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #eab308;"></div>
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #22c55e;"></div>
+                  </div>
+                  <span class="text-xs" style="color: rgb(var(--text-03));">+19</span>
+                </div>
+                <div class="flex items-center gap-3 text-xs" style="color: rgb(var(--text-03));">
+                  <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg> $263</span>
+                  <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg> Jan 17</span>
+                </div>
               </div>
             </div>
-          </div>
+          </a>
 
-          <!-- Market Card 4 -->
-          <div class="bg-white rounded-2xl p-4 border border-gray-100" style="box-shadow: 0 8px 16px rgba(0,0,0,0.04);">
-            <div class="flex items-start justify-between gap-3 mb-4">
-              <div class="flex items-start gap-3">
-                <img src="/images/houston.png" alt="Houston Texans" class="w-10 h-10 rounded-xl object-cover">
-                <h3 class="font-semibold text-gray-900 text-sm">Houston at New England</h3>
-              </div>
-              <div class="flex gap-1">
-                <button class="p-1.5 hover:bg-gray-100 rounded-lg"><svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg></button>
-                <button class="p-1.5 hover:bg-gray-100 rounded-lg"><svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
-              </div>
-            </div>
-            <div class="space-y-2 mb-4">
-              <div class="flex items-center gap-2 py-2 px-3 rounded-lg bg-gray-50">
-                <span class="flex-1 text-sm text-gray-700">Houston</span>
-                <span class="text-sm font-semibold text-gray-900 w-12 text-right">40%</span>
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-lg" style="background: rgba(69, 137, 255, 0.1); color: #4589ff;">YES</button>
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-lg" style="background: rgba(250, 77, 86, 0.1); color: #fa4d56;">NO</button>
-              </div>
-              <div class="flex items-center gap-2 py-2 px-3 rounded-lg bg-gray-50">
-                <span class="flex-1 text-sm text-gray-700">New England</span>
-                <span class="text-sm font-semibold text-gray-900 w-12 text-right">64%</span>
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-lg" style="background: rgba(69, 137, 255, 0.1); color: #4589ff;">YES</button>
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-lg" style="background: rgba(250, 77, 86, 0.1); color: #fa4d56;">NO</button>
-              </div>
-              <div class="flex items-center gap-2 py-2 px-3 rounded-lg bg-gray-50">
-                <span class="flex-1 text-sm text-gray-700">NE -3.5</span>
-                <span class="text-sm font-semibold text-gray-900 w-12 text-right">45%</span>
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-lg" style="background: rgba(69, 137, 255, 0.1); color: #4589ff;">YES</button>
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-lg" style="background: rgba(250, 77, 86, 0.1); color: #fa4d56;">NO</button>
-              </div>
-            </div>
-            <div class="flex items-center justify-between pt-3 border-t border-gray-100">
-              <div class="flex items-center gap-2">
-                <div class="flex -space-x-1.5">
-                  <div class="w-5 h-5 rounded-full bg-orange-400 border-2 border-white"></div>
-                  <div class="w-5 h-5 rounded-full bg-yellow-400 border-2 border-white"></div>
-                  <div class="w-5 h-5 rounded-full bg-green-400 border-2 border-white"></div>
+          <!-- Market Card 4 - Houston at New England -->
+          <a href="#" class="square-dot-tile market-card block">
+            <div class="card-content p-4">
+              <div class="flex items-start justify-between gap-3 mb-4">
+                <div class="flex items-start gap-3">
+                  <img src="/images/houston.png" alt="Houston Texans" class="w-10 h-10 rounded-xl object-cover">
+                  <h3 class="font-semibold text-sm" style="color: rgb(var(--text-01));">Houston at New England</h3>
                 </div>
-                <span class="text-xs text-gray-500">+15</span>
+                <div class="flex gap-1">
+                  <button class="icon-btn"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg></button>
+                  <button class="icon-btn"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                </div>
               </div>
-              <div class="flex items-center gap-3 text-xs text-gray-500">
-                <span>↗ $940</span>
-                <span>📅 Jan 18</span>
+              <div class="space-y-2 mb-4">
+                <div class="market-row">
+                  <span class="flex-1 text-sm rounded-button px-3 py-1.5" style="background: white; color: rgb(var(--text-01));">Houston</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">40%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+                <div class="market-row">
+                  <span class="flex-1 text-sm rounded-button px-3 py-1.5" style="background: white; color: rgb(var(--text-01));">New England</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">63%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+                <div class="market-row">
+                  <span class="flex-1 text-sm rounded-button px-3 py-1.5" style="background: white; color: rgb(var(--text-01));">NE -3</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">50%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+              </div>
+              <div class="flex items-center justify-between pt-3 border-t" style="border-color: rgba(0,0,0,0.06);">
+                <div class="flex items-center gap-2">
+                  <div class="flex -space-x-1.5">
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #f97316;"></div>
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #eab308;"></div>
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #22c55e;"></div>
+                  </div>
+                  <span class="text-xs" style="color: rgb(var(--text-03));">+18</span>
+                </div>
+                <div class="flex items-center gap-3 text-xs" style="color: rgb(var(--text-03));">
+                  <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg> $425</span>
+                  <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg> Jan 18</span>
+                </div>
               </div>
             </div>
-          </div>
+          </a>
 
-          <!-- Market Card 5 - Super Bowl -->
-          <div class="bg-white rounded-2xl p-4 border border-gray-100" style="box-shadow: 0 8px 16px rgba(0,0,0,0.04);">
-            <div class="flex items-start justify-between gap-3 mb-4">
-              <div class="flex items-start gap-3">
-                <img src="/images/superbowl.png" alt="Super Bowl" class="w-10 h-10 rounded-xl object-cover">
-                <h3 class="font-semibold text-gray-900 text-sm">Super Bowl Champion 2026</h3>
-              </div>
-              <div class="flex gap-1">
-                <button class="p-1.5 hover:bg-gray-100 rounded-lg"><svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg></button>
-                <button class="p-1.5 hover:bg-gray-100 rounded-lg"><svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
-              </div>
-            </div>
-            <div class="space-y-2 mb-4">
-              <div class="flex items-center gap-2 py-2 px-3 rounded-lg bg-gray-50">
-                <span class="flex-1 text-sm text-gray-700">Los Angeles R</span>
-                <span class="text-sm font-semibold text-gray-900 w-12 text-right">19.8%</span>
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-lg" style="background: rgba(69, 137, 255, 0.1); color: #4589ff;">YES</button>
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-lg" style="background: rgba(250, 77, 86, 0.1); color: #fa4d56;">NO</button>
-              </div>
-              <div class="flex items-center gap-2 py-2 px-3 rounded-lg bg-gray-50">
-                <span class="flex-1 text-sm text-gray-700">Seattle</span>
-                <span class="text-sm font-semibold text-gray-900 w-12 text-right">24%</span>
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-lg" style="background: rgba(69, 137, 255, 0.1); color: #4589ff;">YES</button>
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-lg" style="background: rgba(250, 77, 86, 0.1); color: #fa4d56;">NO</button>
-              </div>
-              <div class="flex items-center gap-2 py-2 px-3 rounded-lg bg-gray-50">
-                <span class="flex-1 text-sm text-gray-700">Buffalo</span>
-                <span class="text-sm font-semibold text-gray-900 w-12 text-right">14%</span>
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-lg" style="background: rgba(69, 137, 255, 0.1); color: #4589ff;">YES</button>
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-lg" style="background: rgba(250, 77, 86, 0.1); color: #fa4d56;">NO</button>
-              </div>
-            </div>
-            <div class="flex items-center justify-between pt-3 border-t border-gray-100">
-              <div class="flex items-center gap-2">
-                <div class="flex -space-x-1.5">
-                  <div class="w-5 h-5 rounded-full bg-orange-400 border-2 border-white"></div>
-                  <div class="w-5 h-5 rounded-full bg-yellow-400 border-2 border-white"></div>
-                  <div class="w-5 h-5 rounded-full bg-green-400 border-2 border-white"></div>
+          <!-- Market Card 5 - Super Bowl Champion 2026 -->
+          <a href="#" class="square-dot-tile market-card block">
+            <div class="card-content p-4">
+              <div class="flex items-start justify-between gap-3 mb-4">
+                <div class="flex items-start gap-3">
+                  <img src="/images/superbowl.png" alt="Super Bowl" class="w-10 h-10 rounded-xl object-cover">
+                  <h3 class="font-semibold text-sm" style="color: rgb(var(--text-01));">Super Bowl Champion 2026</h3>
                 </div>
-                <span class="text-xs text-gray-500">+2000</span>
+                <div class="flex gap-1">
+                  <button class="icon-btn"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg></button>
+                  <button class="icon-btn"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                </div>
               </div>
-              <div class="flex items-center gap-3 text-xs text-gray-500">
-                <span>↗ $6,232,880</span>
-                <span>📅 Feb 8</span>
+              <div class="space-y-2 mb-4">
+                <div class="market-row">
+                  <span class="flex-1 text-sm rounded-button px-3 py-1.5" style="background: white; color: rgb(var(--text-01));">Los Angeles R</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">20%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+                <div class="market-row">
+                  <span class="flex-1 text-sm rounded-button px-3 py-1.5" style="background: white; color: rgb(var(--text-01));">Seattle</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">24%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+                <div class="market-row">
+                  <span class="flex-1 text-sm rounded-button px-3 py-1.5" style="background: white; color: rgb(var(--text-01));">Buffalo</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">14%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+              </div>
+              <div class="flex items-center justify-between pt-3 border-t" style="border-color: rgba(0,0,0,0.06);">
+                <div class="flex items-center gap-2">
+                  <div class="flex -space-x-1.5">
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #f97316;"></div>
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #eab308;"></div>
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #22c55e;"></div>
+                  </div>
+                  <span class="text-xs" style="color: rgb(var(--text-03));">+2000</span>
+                </div>
+                <div class="flex items-center gap-3 text-xs" style="color: rgb(var(--text-03));">
+                  <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg> $6.2M</span>
+                  <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg> Feb 8</span>
+                </div>
               </div>
             </div>
-          </div>
+          </a>
 
-          <!-- Market Card 6 - Pokemon -->
-          <div class="bg-white rounded-2xl p-4 border border-gray-100" style="box-shadow: 0 8px 16px rgba(0,0,0,0.04);">
-            <div class="flex items-start justify-between gap-3 mb-4">
-              <div class="flex items-start gap-3">
-                <img src="/images/pokemon.png" alt="Pokemon Card" class="w-10 h-10 rounded-xl object-cover">
-                <h3 class="font-semibold text-gray-900 text-sm">Will Logan Paul's PSA 10 Pokémon Illustrator Sale Price be over $6 million?</h3>
-              </div>
-              <div class="flex gap-1">
-                <button class="p-1.5 hover:bg-gray-100 rounded-lg"><svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg></button>
-                <button class="p-1.5 hover:bg-gray-100 rounded-lg"><svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
-              </div>
-            </div>
-            <div class="space-y-2 mb-4">
-              <div class="flex items-center gap-2 py-2 px-3 rounded-lg bg-gray-50">
-                <span class="flex-1 text-sm text-gray-700">Yes</span>
-                <span class="text-sm font-semibold text-gray-900 w-12 text-right">99%</span>
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-lg" style="background: rgba(69, 137, 255, 0.1); color: #4589ff;">YES</button>
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-lg" style="background: rgba(250, 77, 86, 0.1); color: #fa4d56;">NO</button>
-              </div>
-              <div class="flex items-center gap-2 py-2 px-3 rounded-lg bg-gray-50">
-                <span class="flex-1 text-sm text-gray-700">No</span>
-                <span class="text-sm font-semibold text-gray-900 w-12 text-right">1%</span>
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-lg" style="background: rgba(69, 137, 255, 0.1); color: #4589ff;">YES</button>
-                <button class="px-2.5 py-1 text-xs font-semibold rounded-lg" style="background: rgba(250, 77, 86, 0.1); color: #fa4d56;">NO</button>
-              </div>
-            </div>
-            <div class="flex items-center justify-between pt-3 border-t border-gray-100">
-              <div class="flex items-center gap-2">
-                <div class="flex -space-x-1.5">
-                  <div class="w-5 h-5 rounded-full bg-orange-400 border-2 border-white"></div>
-                  <div class="w-5 h-5 rounded-full bg-yellow-400 border-2 border-white"></div>
-                  <div class="w-5 h-5 rounded-full bg-green-400 border-2 border-white"></div>
+          <!-- Market Card 6 - Pokemon Illustrator -->
+          <a href="#" class="square-dot-tile market-card block">
+            <div class="card-content p-4">
+              <div class="flex items-start justify-between gap-3 mb-4">
+                <div class="flex items-start gap-3">
+                  <img src="/images/pokemon.png" alt="Pokemon Card" class="w-10 h-10 rounded-xl object-cover">
+                  <h3 class="font-semibold text-sm" style="color: rgb(var(--text-01));">Will Logan Paul's PSA 10 Pokémon Illustrator Sale Price be over $6 million?</h3>
                 </div>
-                <span class="text-xs text-gray-500">+1800</span>
+                <div class="flex gap-1">
+                  <button class="icon-btn"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg></button>
+                  <button class="icon-btn"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                </div>
               </div>
-              <div class="flex items-center gap-3 text-xs text-gray-500">
-                <span>↗ $7,560,305</span>
-                <span>📅 Feb 28</span>
+              <div class="mb-4">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-sm font-semibold" style="color: rgb(var(--interactive-03));">99%</span>
+                  <span class="text-sm font-semibold" style="color: rgb(var(--accent-red));">1%</span>
+                </div>
+                <div class="h-2 rounded-full overflow-hidden" style="background: rgba(240, 68, 56, 0.2);">
+                  <div class="h-full rounded-full" style="width: 99%; background: rgb(var(--interactive-03));"></div>
+                </div>
+              </div>
+              <div class="flex items-center justify-between pt-3 border-t" style="border-color: rgba(0,0,0,0.06);">
+                <div class="flex items-center gap-2">
+                  <div class="flex -space-x-1.5">
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #f97316;"></div>
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #eab308;"></div>
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #22c55e;"></div>
+                  </div>
+                  <span class="text-xs" style="color: rgb(var(--text-03));">+1800</span>
+                </div>
+                <div class="flex items-center gap-3 text-xs" style="color: rgb(var(--text-03));">
+                  <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg> $7.5M</span>
+                  <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg> Feb 28</span>
+                </div>
               </div>
             </div>
-          </div>
+          </a>
         </div>
 
         <!-- View All Markets Button -->
         <div class="flex justify-center mt-10">
-          <a href="/markets" class="px-5 py-2.5 bg-gray-900 text-white rounded-full font-semibold">View All Markets</a>
+          <a href="/markets" class="px-6 py-3 rounded-full font-semibold text-white" style="background: rgb(var(--interactive-01));">View All Markets</a>
         </div>
       </div>
 
       <!-- Live Section -->
-      <div class="mx-4 lg:mx-8 max-w-screen-xl lg:mx-auto">
-        <div class="rounded-3xl overflow-hidden" style="background: linear-gradient(135deg, #1f2937 0%, #111827 100%);">
-          <div class="grid md:grid-cols-2 gap-8 p-8 md:p-12">
-            <div>
-              <div class="flex items-center gap-2 mb-4">
-                <span class="text-red-400 text-sm font-semibold tracking-wide">LIVE</span>
-                <div class="w-2 h-2 rounded-full bg-green-500" style="animation: pulse 2s infinite;"></div>
+      <div class="mx-4 lg:mx-8 mb-6">
+        <div class="mx-auto max-w-screen-xl">
+          <div class="rounded-dialog overflow-hidden" style="background: linear-gradient(135deg, #1f2937 0%, #111827 100%);">
+            <div class="grid md:grid-cols-2 gap-8 p-8 md:p-12">
+              <div>
+                <div class="flex items-center gap-2 mb-4">
+                  <span class="text-sm font-semibold tracking-wide" style="color: #f87171;">LIVE</span>
+                  <div class="w-2 h-2 rounded-full bg-green-500" style="animation: pulse 2s infinite;"></div>
+                </div>
+                <h2 class="font-display text-3xl md:text-4xl text-white mb-4">It's All Happening on Predict.</h2>
+                <p style="color: #9ca3af;">Join thousands of other traders cashing in on their hunches in real time.</p>
               </div>
-              <h2 class="font-display text-3xl md:text-4xl text-white mb-4">It's All Happening on Predict.</h2>
-              <p class="text-gray-400">Join thousands of other traders cashing in on their hunches in real time.</p>
-            </div>
-            <div class="bg-white rounded-2xl p-4 max-h-[320px] overflow-y-auto">
-              <div class="space-y-1">
-                <div class="flex items-center justify-between py-3 border-b border-gray-100">
-                  <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-blue-500"></div>
-                    <div>
-                      <div class="text-sm"><span class="font-semibold text-gray-900">PrePaul</span> <span class="text-red-500 font-medium">Bought No</span> <span class="text-gray-500">• January 31, 2026</span></div>
-                      <div class="text-xs text-gray-500">36 at 90.4c ($32.54)</div>
+              <div class="bg-white rounded-dialog p-4 max-h-[320px] overflow-y-auto">
+                <div class="space-y-1">
+                  <div class="flex items-center justify-between py-3 border-b" style="border-color: rgba(0,0,0,0.06);">
+                    <div class="flex items-center gap-3">
+                      <div class="w-8 h-8 rounded-full" style="background: #3b82f6;"></div>
+                      <div>
+                        <div class="text-sm"><span class="font-semibold" style="color: rgb(var(--text-01));">PrePaul</span> <span class="font-medium" style="color: #ef4444;">Bought No</span> <span style="color: rgb(var(--text-03));">- January 31, 2026</span></div>
+                        <div class="text-xs" style="color: rgb(var(--text-03));">36 at 90.4c ($32.54)</div>
+                      </div>
                     </div>
+                    <span class="text-xs" style="color: rgb(var(--text-03));">10s ago</span>
                   </div>
-                  <span class="text-xs text-gray-400">10s ago</span>
-                </div>
-                <div class="flex items-center justify-between py-3 border-b border-gray-100">
-                  <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-blue-500"></div>
-                    <div>
-                      <div class="text-sm"><span class="font-semibold text-gray-900">PrePaul</span> <span class="text-red-500 font-medium">Bought No</span> <span class="text-gray-500">• January 31, 2026</span></div>
-                      <div class="text-xs text-gray-500">101 at 90.4c ($91.3)</div>
+                  <div class="flex items-center justify-between py-3 border-b" style="border-color: rgba(0,0,0,0.06);">
+                    <div class="flex items-center gap-3">
+                      <div class="w-8 h-8 rounded-full" style="background: #3b82f6;"></div>
+                      <div>
+                        <div class="text-sm"><span class="font-semibold" style="color: rgb(var(--text-01));">PrePaul</span> <span class="font-medium" style="color: #ef4444;">Bought No</span> <span style="color: rgb(var(--text-03));">- January 31, 2026</span></div>
+                        <div class="text-xs" style="color: rgb(var(--text-03));">101 at 90.4c ($91.3)</div>
+                      </div>
                     </div>
+                    <span class="text-xs" style="color: rgb(var(--text-03));">10s ago</span>
                   </div>
-                  <span class="text-xs text-gray-400">10s ago</span>
-                </div>
-                <div class="flex items-center justify-between py-3 border-b border-gray-100">
-                  <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-blue-500"></div>
-                    <div>
-                      <div class="text-sm"><span class="font-semibold text-gray-900">PrePaul</span> <span class="text-red-500 font-medium">Bought No</span> <span class="text-gray-500">• January 31, 2026</span></div>
-                      <div class="text-xs text-gray-500">300 at 90.4c ($271.2)</div>
+                  <div class="flex items-center justify-between py-3 border-b" style="border-color: rgba(0,0,0,0.06);">
+                    <div class="flex items-center gap-3">
+                      <div class="w-8 h-8 rounded-full" style="background: #8b5cf6;"></div>
+                      <div>
+                        <div class="text-sm"><span class="font-semibold" style="color: rgb(var(--text-01));">CryptoKing</span> <span class="font-medium" style="color: #22c55e;">Bought Yes</span> <span style="color: rgb(var(--text-03));">- Super Bowl Champion</span></div>
+                        <div class="text-xs" style="color: rgb(var(--text-03));">500 at 24c ($120)</div>
+                      </div>
                     </div>
+                    <span class="text-xs" style="color: rgb(var(--text-03));">15s ago</span>
                   </div>
-                  <span class="text-xs text-gray-400">10s ago</span>
-                </div>
-                <div class="flex items-center justify-between py-3">
-                  <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-blue-500"></div>
-                    <div>
-                      <div class="text-sm"><span class="font-semibold text-gray-900">PrePaul</span> <span class="text-red-500 font-medium">Bought No</span> <span class="text-gray-500">• January 31, 2026</span></div>
-                      <div class="text-xs text-gray-500">101 at 90.4c ($91.3)</div>
+                  <div class="flex items-center justify-between py-3">
+                    <div class="flex items-center gap-3">
+                      <div class="w-8 h-8 rounded-full" style="background: #f97316;"></div>
+                      <div>
+                        <div class="text-sm"><span class="font-semibold" style="color: rgb(var(--text-01));">BetMaster</span> <span class="font-medium" style="color: #22c55e;">Bought Yes</span> <span style="color: rgb(var(--text-03));">- Buffalo at Denver</span></div>
+                        <div class="text-xs" style="color: rgb(var(--text-03));">200 at 52c ($104)</div>
+                      </div>
                     </div>
+                    <span class="text-xs" style="color: rgb(var(--text-03));">22s ago</span>
                   </div>
-                  <span class="text-xs text-gray-400">10s ago</span>
                 </div>
               </div>
             </div>
@@ -464,40 +677,42 @@
       </div>
 
       <!-- Stats Section -->
-      <div class="mx-4 lg:mx-8 max-w-screen-xl lg:mx-auto mt-6">
-        <div class="rounded-3xl p-8 md:p-12" style="background: linear-gradient(135deg, rgb(110, 87, 249) 0%, rgb(139, 92, 246) 100%);">
-          <div class="grid md:grid-cols-2 gap-8 items-center">
-            <div>
-              <h2 class="font-display text-3xl md:text-4xl text-white">Fortune Favors the Forecasters</h2>
-            </div>
-            <div class="grid grid-cols-2 gap-4">
-              <div class="bg-white rounded-2xl p-5">
-                <div class="w-10 h-10 rounded-full flex items-center justify-center mb-3" style="background: rgba(110, 87, 249, 0.1);">
-                  <svg class="w-5 h-5" style="color: rgb(110, 87, 249);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
-                </div>
-                <div class="text-xl md:text-2xl font-bold mb-0.5" style="color: rgb(110, 87, 249);">$405,515,552</div>
-                <div class="text-sm text-gray-500">Total volume</div>
+      <div class="mx-4 lg:mx-8 mb-6">
+        <div class="mx-auto max-w-screen-xl">
+          <div class="rounded-dialog p-8 md:p-12" style="background: linear-gradient(135deg, rgb(110, 87, 249) 0%, rgb(139, 92, 246) 100%);">
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+              <div>
+                <h2 class="font-display text-3xl md:text-4xl text-white">Fortune Favors the Forecasters</h2>
               </div>
-              <div class="bg-white rounded-2xl p-5">
-                <div class="w-10 h-10 rounded-full flex items-center justify-center mb-3" style="background: rgba(110, 87, 249, 0.1);">
-                  <svg class="w-5 h-5" style="color: rgb(110, 87, 249);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="bg-white rounded-dialog p-5">
+                  <div class="w-10 h-10 rounded-full flex items-center justify-center mb-3" style="background: rgba(110, 87, 249, 0.1);">
+                    <svg class="w-5 h-5" style="color: rgb(110, 87, 249);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                  </div>
+                  <div class="text-xl md:text-2xl font-bold mb-0.5" style="color: rgb(110, 87, 249);">$405,515,552</div>
+                  <div class="text-sm" style="color: rgb(var(--text-03));">Total volume</div>
                 </div>
-                <div class="text-xl md:text-2xl font-bold mb-0.5" style="color: rgb(110, 87, 249);">$404,958,149</div>
-                <div class="text-sm text-gray-500">30d volume</div>
-              </div>
-              <div class="bg-white rounded-2xl p-5">
-                <div class="w-10 h-10 rounded-full flex items-center justify-center mb-3" style="background: rgba(110, 87, 249, 0.1);">
-                  <svg class="w-5 h-5" style="color: rgb(110, 87, 249);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+                <div class="bg-white rounded-dialog p-5">
+                  <div class="w-10 h-10 rounded-full flex items-center justify-center mb-3" style="background: rgba(110, 87, 249, 0.1);">
+                    <svg class="w-5 h-5" style="color: rgb(110, 87, 249);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                  </div>
+                  <div class="text-xl md:text-2xl font-bold mb-0.5" style="color: rgb(110, 87, 249);">$404,958,149</div>
+                  <div class="text-sm" style="color: rgb(var(--text-03));">30d volume</div>
                 </div>
-                <div class="text-xl md:text-2xl font-bold mb-0.5" style="color: rgb(110, 87, 249);">872,424</div>
-                <div class="text-sm text-gray-500">Bets made</div>
-              </div>
-              <div class="bg-white rounded-2xl p-5">
-                <div class="w-10 h-10 rounded-full flex items-center justify-center mb-3" style="background: rgba(110, 87, 249, 0.1);">
-                  <svg class="w-5 h-5" style="color: rgb(110, 87, 249);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <div class="bg-white rounded-dialog p-5">
+                  <div class="w-10 h-10 rounded-full flex items-center justify-center mb-3" style="background: rgba(110, 87, 249, 0.1);">
+                    <svg class="w-5 h-5" style="color: rgb(110, 87, 249);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+                  </div>
+                  <div class="text-xl md:text-2xl font-bold mb-0.5" style="color: rgb(110, 87, 249);">872,424</div>
+                  <div class="text-sm" style="color: rgb(var(--text-03));">Bets made</div>
                 </div>
-                <div class="text-xl md:text-2xl font-bold mb-0.5" style="color: rgb(110, 87, 249);">79,164</div>
-                <div class="text-sm text-gray-500">Total users</div>
+                <div class="bg-white rounded-dialog p-5">
+                  <div class="w-10 h-10 rounded-full flex items-center justify-center mb-3" style="background: rgba(110, 87, 249, 0.1);">
+                    <svg class="w-5 h-5" style="color: rgb(110, 87, 249);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                  </div>
+                  <div class="text-xl md:text-2xl font-bold mb-0.5" style="color: rgb(110, 87, 249);">79,164</div>
+                  <div class="text-sm" style="color: rgb(var(--text-03));">Total users</div>
+                </div>
               </div>
             </div>
           </div>
@@ -507,11 +722,11 @@
       <!-- Social Section -->
       <div class="max-w-screen-xl mx-auto px-4 py-16">
         <div class="text-center">
-          <h2 class="font-display text-3xl md:text-4xl text-gray-900 mb-4">Join the Community</h2>
-          <p class="text-gray-500 mb-8 max-w-xl mx-auto">Follow us on social media and join our Discord to stay up to date with the latest markets and community discussions.</p>
+          <h2 class="font-display text-3xl md:text-4xl mb-4" style="color: rgb(var(--text-01));">Join the Community</h2>
+          <p class="mb-8 max-w-xl mx-auto" style="color: rgb(var(--text-03));">Follow us on social media and join our Discord to stay up to date with the latest markets and community discussions.</p>
           <div class="flex items-center justify-center gap-4">
-            <a href="#" class="p-3 bg-gray-100 rounded-full hover:bg-gray-200"><svg class="w-6 h-6 text-gray-700" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
-            <a href="#" class="p-3 bg-gray-100 rounded-full hover:bg-gray-200"><svg class="w-6 h-6 text-gray-700" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg></a>
+            <a href="#" class="p-3 rounded-full hover:opacity-80" style="background: rgba(0,0,0,0.05);"><svg class="w-6 h-6" style="color: rgb(var(--text-01));" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+            <a href="#" class="p-3 rounded-full hover:opacity-80" style="background: rgba(0,0,0,0.05);"><svg class="w-6 h-6" style="color: rgb(var(--text-01));" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg></a>
           </div>
         </div>
       </div>
@@ -519,29 +734,21 @@
   </main>
 
   <!-- Footer -->
-  <footer class="border-t border-gray-100 py-8">
+  <footer class="border-t py-8" style="border-color: rgba(0,0,0,0.06);">
     <div class="max-w-screen-xl mx-auto px-4">
       <div class="flex flex-col md:flex-row items-center justify-between gap-4">
         <div class="flex items-center gap-6">
-          <a href="#" class="text-sm text-gray-500 hover:text-gray-700">Terms & Privacy</a>
-          <a href="#" class="text-sm text-gray-500 hover:text-gray-700">Developers</a>
-          <a href="#" class="text-sm text-gray-500 hover:text-gray-700">Docs</a>
-          <a href="#" class="text-sm text-gray-500 hover:text-gray-700">Blog</a>
+          <a href="#" class="text-sm hover:opacity-80" style="color: rgb(var(--text-03));">Terms & Privacy</a>
+          <a href="#" class="text-sm hover:opacity-80" style="color: rgb(var(--text-03));">Developers</a>
+          <a href="#" class="text-sm hover:opacity-80" style="color: rgb(var(--text-03));">Docs</a>
+          <a href="#" class="text-sm hover:opacity-80" style="color: rgb(var(--text-03));">Blog</a>
         </div>
         <div class="flex items-center gap-4">
-          <a href="#" class="text-gray-400 hover:text-gray-600"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
-          <a href="#" class="text-gray-400 hover:text-gray-600"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg></a>
+          <a href="#" style="color: rgb(var(--text-03));" class="hover:opacity-80"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+          <a href="#" style="color: rgb(var(--text-03));" class="hover:opacity-80"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg></a>
         </div>
       </div>
     </div>
   </footer>
-
-  <style>
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-    .rounded-container { border-radius: 16px; }
-  </style>
 </body>
 </html>
