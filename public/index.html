@@ -356,6 +356,9 @@
       align-items: center;
       gap: 8px;
     }
+    .user-menu.hidden {
+      display: none !important;
+    }
     .user-avatar {
       width: 32px;
       height: 32px;
@@ -413,6 +416,69 @@
     }
     .popup-overlay.hidden {
       display: none;
+    }
+
+    /* Modal styles (for dynamically created modals) */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s;
+    }
+    .modal-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    .modal-content {
+      background: white;
+      border-radius: 24px;
+      padding: 32px;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+    }
+    .modal-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: rgb(var(--text-01));
+    }
+    .modal-text {
+      color: rgb(var(--text-03));
+      margin-bottom: 24px;
+    }
+    .modal-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      height: 48px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .modal-btn-primary {
+      background: linear-gradient(135deg, #9945FF 0%, #14F195 100%);
+      color: white;
+      border: none;
+    }
+    .modal-btn-primary:hover {
+      opacity: 0.9;
+    }
+    .modal-btn-secondary {
+      background: transparent;
+      color: rgb(var(--text-03));
+      border: 1px solid rgba(0,0,0,0.1);
+      margin-top: 12px;
     }
     .popup-content {
       background: white;
@@ -1121,6 +1187,9 @@
 
   <!-- Supabase SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Privy SDK -->
+  <script src="https://unpkg.com/@privy-io/js-sdk-core@latest/dist/umd/index.js"></script>
 
   <!-- Auth Script -->
   <script src="/js/auth.js"></script>

@@ -1,14 +1,24 @@
-// Phantom Wallet and Supabase Authentication Integration
-// This provides direct Phantom wallet integration for a static HTML site
+// Privy + Supabase Authentication Integration
+// Configure your Privy App ID below
 
-// Configuration
+// ============================================
+// CONFIGURATION - UPDATE THESE VALUES
+// ============================================
+const PRIVY_APP_ID = 'cm5ya0hoz00f3kvz3dgplpznt'; // Get this from https://dashboard.privy.io
 const SUPABASE_URL = 'https://bqncfjnigubyictxbliq.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbmNmam5pZ3VieWljdHhibGlxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzY4MDEwNTgsImV4cCI6MjA1MjM3NzA1OH0.GpQsJcKW-UENe7OZnZVkTx_HBvZjVrmbS2F7c8CJDWM'; // Replace with your actual anon key
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbmNmam5pZ3VieWljdHhibGlxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzY4MDEwNTgsImV4cCI6MjA1MjM3NzA1OH0.GpQsJcKW-UENe7OZnZVkTx_HBvZjVrmbS2F7c8CJDWM';
 
-// Global state
+// ============================================
+// GLOBAL STATE
+// ============================================
 let supabaseClient = null;
+let privyClient = null;
 let currentUser = null;
-let connectedWallet = null;
+let isAuthenticated = false;
+
+// ============================================
+// INITIALIZATION
+// ============================================
 
 // Initialize Supabase
 function initSupabase() {
@@ -21,38 +31,66 @@ function initSupabase() {
   return false;
 }
 
-// Check if Phantom wallet is installed
-function isPhantomInstalled() {
-  const provider = window.phantom?.solana;
-  return provider?.isPhantom;
-}
-
-// Get Phantom provider
-function getPhantomProvider() {
-  if ('phantom' in window) {
-    const provider = window.phantom?.solana;
-    if (provider?.isPhantom) {
-      return provider;
-    }
-  }
-  // If Phantom is not installed, redirect to install page
-  window.open('https://phantom.app/', '_blank');
-  return null;
-}
-
-// Connect to Phantom wallet
-async function connectWallet() {
+// Initialize Privy
+async function initPrivy() {
   try {
-    const provider = getPhantomProvider();
-    if (!provider) {
-      alert('Please install Phantom wallet to continue');
-      return null;
+    if (typeof window.PrivyCore !== 'undefined') {
+      privyClient = new window.PrivyCore.PrivyClient({
+        appId: PRIVY_APP_ID,
+      });
+      console.log('Privy initialized');
+
+      // Check if user is already authenticated
+      const user = await privyClient.getUser();
+      if (user) {
+        await handleAuthenticatedUser(user);
+      }
+      return true;
+    }
+  } catch (err) {
+    console.log('Privy SDK not available, using fallback auth');
+  }
+  return false;
+}
+
+// ============================================
+// AUTHENTICATION FUNCTIONS
+// ============================================
+
+// Login with Privy
+async function login() {
+  try {
+    // Try Privy first
+    if (privyClient) {
+      await privyClient.login();
+      const user = await privyClient.getUser();
+      if (user) {
+        await handleAuthenticatedUser(user);
+        return;
+      }
     }
 
-    // Connect to wallet
+    // Fallback to Phantom wallet direct connection
+    await connectPhantomWallet();
+  } catch (err) {
+    console.error('Login error:', err);
+    // Fallback to Phantom
+    await connectPhantomWallet();
+  }
+}
+
+// Connect Phantom wallet directly (fallback)
+async function connectPhantomWallet() {
+  if (!window.phantom?.solana) {
+    // Show install prompt
+    showInstallPhantomModal();
+    return null;
+  }
+
+  try {
+    const provider = window.phantom.solana;
     const resp = await provider.connect();
     const walletAddress = resp.publicKey.toString();
-    connectedWallet = walletAddress;
 
     console.log('Connected wallet:', walletAddress);
 
@@ -61,6 +99,7 @@ async function connectWallet() {
 
     if (existingUser) {
       currentUser = existingUser;
+      isAuthenticated = true;
       updateUIForLoggedInUser(existingUser);
     } else {
       // Show profile creation popup for new users
@@ -77,21 +116,66 @@ async function connectWallet() {
   }
 }
 
-// Disconnect wallet
-async function disconnectWallet() {
+// Handle authenticated user (from Privy or wallet)
+async function handleAuthenticatedUser(privyUser) {
   try {
-    const provider = getPhantomProvider();
-    if (provider) {
-      await provider.disconnect();
+    // Get wallet address from Privy user
+    let walletAddress = null;
+    if (privyUser.wallet) {
+      walletAddress = privyUser.wallet.address;
+    } else if (privyUser.linkedAccounts) {
+      const walletAccount = privyUser.linkedAccounts.find(a => a.type === 'wallet');
+      if (walletAccount) {
+        walletAddress = walletAccount.address;
+      }
     }
-    connectedWallet = null;
-    currentUser = null;
-    updateUIForLoggedOutUser();
-    console.log('Wallet disconnected');
+
+    // Check if user exists in our database
+    const existingUser = walletAddress ? await checkUserByWallet(walletAddress) : null;
+
+    if (existingUser) {
+      currentUser = existingUser;
+      isAuthenticated = true;
+      updateUIForLoggedInUser(existingUser);
+    } else {
+      // Show profile creation for new users
+      showProfileCreationPopup(walletAddress || privyUser.id);
+    }
   } catch (err) {
-    console.error('Disconnect error:', err);
+    console.error('Error handling authenticated user:', err);
   }
 }
+
+// Logout
+async function logout() {
+  try {
+    // Logout from Privy if available
+    if (privyClient) {
+      await privyClient.logout();
+    }
+
+    // Disconnect Phantom if connected
+    if (window.phantom?.solana?.isConnected) {
+      await window.phantom.solana.disconnect();
+    }
+
+    currentUser = null;
+    isAuthenticated = false;
+    updateUIForLoggedOutUser();
+
+    // Clear storage
+    localStorage.removeItem('predict_user');
+    localStorage.removeItem('predict_wallet');
+
+    console.log('Logged out successfully');
+  } catch (err) {
+    console.error('Logout error:', err);
+  }
+}
+
+// ============================================
+// DATABASE FUNCTIONS
+// ============================================
 
 // Check if user exists by wallet address
 async function checkUserByWallet(walletAddress) {
@@ -146,16 +230,13 @@ async function createUser(userData) {
   }
 }
 
-// Upload profile photo to Supabase storage
-async function uploadProfilePhoto(file, walletAddress) {
-  if (!supabaseClient) {
-    console.error('Supabase not initialized');
-    return null;
-  }
+// Upload profile photo
+async function uploadProfilePhoto(file, identifier) {
+  if (!supabaseClient) return null;
 
   try {
     const fileExt = file.name.split('.').pop();
-    const fileName = `${walletAddress.substring(0, 8)}-${Date.now()}.${fileExt}`;
+    const fileName = `${identifier.substring(0, 8)}-${Date.now()}.${fileExt}`;
     const filePath = `profile-photos/${fileName}`;
 
     const { data, error } = await supabaseClient.storage
@@ -170,7 +251,6 @@ async function uploadProfilePhoto(file, walletAddress) {
       return null;
     }
 
-    // Get public URL
     const { data: urlData } = supabaseClient.storage
       .from('avatars')
       .getPublicUrl(filePath);
@@ -182,11 +262,53 @@ async function uploadProfilePhoto(file, walletAddress) {
   }
 }
 
+// ============================================
+// UI FUNCTIONS
+// ============================================
+
+// Show install Phantom modal
+function showInstallPhantomModal() {
+  const modal = document.createElement('div');
+  modal.id = 'phantom-install-modal';
+  modal.className = 'modal-overlay show';
+  modal.innerHTML = `
+    <div class="modal-content">
+      <div class="modal-title">Phantom Wallet Required</div>
+      <p class="modal-text">To use Predict on Solana, you need to install the Phantom wallet browser extension.</p>
+      <a href="https://phantom.app/" target="_blank" class="modal-btn modal-btn-primary" style="text-decoration: none;">
+        <svg class="w-5 h-5" viewBox="0 0 128 128" fill="currentColor">
+          <circle cx="64" cy="64" r="64" fill="url(#phantom-gradient-install)"/>
+          <defs>
+            <linearGradient id="phantom-gradient-install" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#534BB1"/>
+              <stop offset="100%" style="stop-color:#551BF9"/>
+            </linearGradient>
+          </defs>
+          <path d="M110.584 64.9142H99.142C99.142 41.7651 80.173 23 56.7724 23C33.6612 23 14.8716 41.3057 14.4118 64.0583C13.936 87.5169 35.1858 108 58.8862 108H64.4375C85.4561 108 110.584 89.1507 110.584 64.9142Z" fill="white"/>
+          <ellipse cx="44.5" cy="58.5" rx="7.5" ry="8.5" fill="#534BB1"/>
+          <ellipse cx="70.5" cy="58.5" rx="7.5" ry="8.5" fill="#534BB1"/>
+        </svg>
+        Install Phantom
+      </a>
+      <button onclick="this.closest('.modal-overlay').remove()" class="modal-btn modal-btn-secondary">Cancel</button>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  // Close on overlay click
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) modal.remove();
+  });
+}
+
 // Show profile creation popup
 function showProfileCreationPopup(walletAddress) {
   const popup = document.getElementById('profile-popup');
   if (popup) {
     popup.classList.remove('hidden');
+
+    // Store wallet address for form submission
+    popup.dataset.walletAddress = walletAddress;
 
     // Pre-fill wallet address
     const walletInput = document.getElementById('profile-wallet');
@@ -208,7 +330,10 @@ function hideProfileCreationPopup() {
 async function handleProfileSubmit(event) {
   event.preventDefault();
 
-  if (!connectedWallet) {
+  const popup = document.getElementById('profile-popup');
+  const walletAddress = popup?.dataset.walletAddress;
+
+  if (!walletAddress) {
     alert('Please connect your wallet first');
     return;
   }
@@ -220,9 +345,8 @@ async function handleProfileSubmit(event) {
   submitBtn.disabled = true;
 
   try {
-    // Get form data
     const username = document.getElementById('profile-username').value.trim();
-    const bio = document.getElementById('profile-bio').value.trim() || '';
+    const bio = document.getElementById('profile-bio')?.value.trim() || '';
     const photoInput = document.getElementById('profile-photo');
 
     if (!username) {
@@ -232,7 +356,7 @@ async function handleProfileSubmit(event) {
       return;
     }
 
-    // Check if username is already taken
+    // Check if username is taken
     const { data: existingUsername } = await supabaseClient
       .from('users')
       .select('id')
@@ -248,16 +372,16 @@ async function handleProfileSubmit(event) {
 
     // Upload photo if provided
     let photoUrl = null;
-    if (photoInput.files.length > 0) {
-      photoUrl = await uploadProfilePhoto(photoInput.files[0], connectedWallet);
+    if (photoInput?.files?.length > 0) {
+      photoUrl = await uploadProfilePhoto(photoInput.files[0], walletAddress);
     }
 
-    // Create user in database (using wallet_address as unique identifier)
+    // Create user
     const userData = {
       username: username,
       bio: bio,
       profile_photo_url: photoUrl,
-      wallet_address: connectedWallet,
+      wallet_address: walletAddress,
       created_at: new Date().toISOString()
     };
 
@@ -265,6 +389,7 @@ async function handleProfileSubmit(event) {
 
     if (newUser) {
       currentUser = newUser;
+      isAuthenticated = true;
       hideProfileCreationPopup();
       updateUIForLoggedInUser(newUser);
       console.log('Profile created successfully:', newUser);
@@ -294,11 +419,12 @@ function updateUIForLoggedInUser(user) {
 
     // Update avatar
     const avatar = userMenu.querySelector('.user-avatar');
-    if (avatar && user.profile_photo_url) {
-      avatar.src = user.profile_photo_url;
-    } else if (avatar) {
-      // Create a gradient avatar with initials
-      avatar.style.background = 'linear-gradient(135deg, rgb(110, 87, 249), rgb(139, 92, 246))';
+    if (avatar) {
+      if (user.profile_photo_url) {
+        avatar.src = user.profile_photo_url;
+      } else {
+        avatar.src = '/images/default-avatar.png';
+      }
     }
 
     // Update username
@@ -308,7 +434,7 @@ function updateUIForLoggedInUser(user) {
     }
   }
 
-  // Store user in localStorage for persistence
+  // Store user in localStorage
   localStorage.setItem('predict_user', JSON.stringify(user));
   localStorage.setItem('predict_wallet', user.wallet_address);
 }
@@ -333,19 +459,18 @@ function updateUIForLoggedOutUser() {
   localStorage.removeItem('predict_wallet');
 }
 
-// Check for existing session on page load
+// Check for existing session
 async function checkExistingSession() {
   const savedWallet = localStorage.getItem('predict_wallet');
   const savedUser = localStorage.getItem('predict_user');
 
   if (savedWallet && savedUser) {
     try {
-      // Verify the wallet is still connected
-      const provider = getPhantomProvider();
-      if (provider && provider.isConnected) {
-        const user = JSON.parse(savedUser);
+      // Verify with database
+      const user = await checkUserByWallet(savedWallet);
+      if (user) {
         currentUser = user;
-        connectedWallet = savedWallet;
+        isAuthenticated = true;
         updateUIForLoggedInUser(user);
         return;
       }
@@ -354,17 +479,25 @@ async function checkExistingSession() {
     }
   }
 
-  // Clear any stale data
+  // Clear stale data and ensure logged out state
   localStorage.removeItem('predict_user');
   localStorage.removeItem('predict_wallet');
+  updateUIForLoggedOutUser();
 }
 
-// Initialize on page load
-document.addEventListener('DOMContentLoaded', async () => {
-  // Initialize Supabase
-  initSupabase();
+// ============================================
+// INITIALIZATION
+// ============================================
 
-  // Check for existing session
+document.addEventListener('DOMContentLoaded', async () => {
+  // Initialize services
+  initSupabase();
+  await initPrivy();
+
+  // Ensure UI is in logged out state initially
+  updateUIForLoggedOutUser();
+
+  // Then check for existing session
   await checkExistingSession();
 
   // Attach event listeners
@@ -375,15 +508,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   const closePopupBtn = document.getElementById('close-profile-popup');
 
   if (loginBtn) {
-    loginBtn.addEventListener('click', connectWallet);
+    loginBtn.addEventListener('click', login);
   }
 
   if (signupBtn) {
-    signupBtn.addEventListener('click', connectWallet);
+    signupBtn.addEventListener('click', login);
   }
 
   if (logoutBtn) {
-    logoutBtn.addEventListener('click', disconnectWallet);
+    logoutBtn.addEventListener('click', logout);
   }
 
   if (profileForm) {
@@ -394,32 +527,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     closePopupBtn.addEventListener('click', hideProfileCreationPopup);
   }
 
-  // Listen for wallet disconnect events
+  // Listen for Phantom wallet events
   if (window.phantom?.solana) {
     window.phantom.solana.on('disconnect', () => {
       console.log('Wallet disconnected');
       currentUser = null;
-      connectedWallet = null;
+      isAuthenticated = false;
       updateUIForLoggedOutUser();
     });
 
     window.phantom.solana.on('accountChanged', (publicKey) => {
-      if (publicKey) {
-        console.log('Account changed to:', publicKey.toString());
-        // Reconnect with new account
-        connectWallet();
-      } else {
-        // Disconnected
+      if (!publicKey) {
         updateUIForLoggedOutUser();
       }
     });
   }
 });
 
-// Export functions for use in HTML
+// Export functions
 window.PredictAuth = {
-  connectWallet,
-  disconnectWallet,
-  isPhantomInstalled,
-  checkExistingSession
+  login,
+  logout,
+  isAuthenticated: () => isAuthenticated,
+  getCurrentUser: () => currentUser
 };
