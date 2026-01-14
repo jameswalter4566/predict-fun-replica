@@ -239,11 +239,98 @@
       border-radius: inherit;
       z-index: -1;
     }
+
+    /* Page background - gray */
+    .page-bg {
+      background-color: #E5E7EB;
+    }
+
+    /* Shadow styles for market cards */
+    .shadow-purple-subtle {
+      box-shadow: 0 1px 2px 0 rgba(132, 86, 247, 0.12);
+    }
+    .shadow-purple-subtle:hover {
+      box-shadow: 0 2px 4px 0 rgba(132, 86, 247, 0.15);
+    }
+
+    /* Torn paper effect */
+    .torn-paper-bottom-light {
+      position: relative;
+    }
+    .torn-paper-bottom-light::after {
+      content: "";
+      position: absolute;
+      bottom: -32px;
+      left: 0;
+      right: 0;
+      height: 32px;
+      z-index: -1;
+      background-color: var(--ui-bg);
+      -webkit-mask: url("/images/torn-paper-bottom-mask.png");
+      mask: url("/images/torn-paper-bottom-mask.png");
+      -webkit-mask-type: alpha;
+      mask-type: alpha;
+    }
+
+    /* Log In button */
+    .btn-login {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+      height: 32px;
+      padding: 0 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      background-color: transparent;
+      color: rgb(31, 42, 55);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-login:hover {
+      opacity: 0.95;
+    }
+
+    /* Sign Up button */
+    .btn-signup {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+      height: 32px;
+      padding: 0 12px;
+      border-radius: 12px;
+      border: none;
+      background-color: rgb(17, 25, 39);
+      color: white;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-signup:hover {
+      opacity: 0.95;
+    }
+
+    /* Main content wrapper with white background */
+    .main-content-wrapper {
+      background-color: var(--ui-bg);
+      position: relative;
+    }
+
+    /* bg-ui-bg class */
+    .bg-ui-bg {
+      background-color: var(--ui-bg);
+    }
   </style>
 </head>
 <body class="min-h-dvh antialiased">
+  <!-- Page background - gray with subtle texture -->
+  <div class="page-bg fixed inset-0 -z-10"></div>
+  <!-- Main content wrapper with white background -->
+  <div class="main-content-wrapper">
   <!-- Navigation -->
-  <nav class="relative z-50 mx-auto max-w-screen-xl border-b border-b-transparent">
+  <nav class="relative z-50 mx-auto max-w-screen-xl border-b border-b-transparent bg-ui-bg">
     <div class="grid h-14 grid-cols-[auto_minmax(0,_1fr)] items-center gap-8 px-4 lg:grid-cols-[auto_auto_minmax(0,_1fr)]">
       <a href="/" class="flex items-center gap-1">
         <span class="text-2xl font-bold" style="color: rgb(var(--text-01));">predict</span>
@@ -262,8 +349,8 @@
           <span class="text-sm" style="color: rgb(var(--text-03));">Search markets...</span>
           <kbd class="text-xs px-1.5 py-0.5 rounded border" style="background: white; color: rgb(var(--text-03)); border-color: rgba(0,0,0,0.1);">Shift + /</kbd>
         </div>
-        <button class="text-sm font-medium" style="color: rgb(var(--text-03));">Log In</button>
-        <button class="px-4 py-2 rounded-full text-sm font-medium text-white" style="background: rgb(var(--interactive-01));">Sign Up</button>
+        <button class="btn-login">Log In</button>
+        <button class="btn-signup">Sign Up</button>
       </div>
     </div>
   </nav>
@@ -319,7 +406,7 @@
         <!-- Markets Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <!-- Market Card 1 - Los Angeles R at Chicago -->
-          <a href="#" class="square-dot-tile market-card block">
+          <a href="#" class="square-dot-tile market-card shadow-purple-subtle block">
             <div class="card-content p-4">
               <div class="flex items-start justify-between gap-3 mb-4">
                 <div class="flex items-start gap-3">
@@ -369,7 +456,7 @@
           </a>
 
           <!-- Market Card 2 - Buffalo at Denver -->
-          <a href="#" class="square-dot-tile market-card block">
+          <a href="#" class="square-dot-tile market-card shadow-purple-subtle block">
             <div class="card-content p-4">
               <div class="flex items-start justify-between gap-3 mb-4">
                 <div class="flex items-start gap-3">
@@ -419,7 +506,7 @@
           </a>
 
           <!-- Market Card 3 - San Francisco at Seattle -->
-          <a href="#" class="square-dot-tile market-card block">
+          <a href="#" class="square-dot-tile market-card shadow-purple-subtle block">
             <div class="card-content p-4">
               <div class="flex items-start justify-between gap-3 mb-4">
                 <div class="flex items-start gap-3">
@@ -469,7 +556,7 @@
           </a>
 
           <!-- Market Card 4 - Houston at New England -->
-          <a href="#" class="square-dot-tile market-card block">
+          <a href="#" class="square-dot-tile market-card shadow-purple-subtle block">
             <div class="card-content p-4">
               <div class="flex items-start justify-between gap-3 mb-4">
                 <div class="flex items-start gap-3">
@@ -519,7 +606,7 @@
           </a>
 
           <!-- Market Card 5 - Super Bowl Champion 2026 -->
-          <a href="#" class="square-dot-tile market-card block">
+          <a href="#" class="square-dot-tile market-card shadow-purple-subtle block">
             <div class="card-content p-4">
               <div class="flex items-start justify-between gap-3 mb-4">
                 <div class="flex items-start gap-3">
@@ -569,7 +656,7 @@
           </a>
 
           <!-- Market Card 6 - Pokemon Illustrator -->
-          <a href="#" class="square-dot-tile market-card block">
+          <a href="#" class="square-dot-tile market-card shadow-purple-subtle block">
             <div class="card-content p-4">
               <div class="flex items-start justify-between gap-3 mb-4">
                 <div class="flex items-start gap-3">
@@ -750,5 +837,6 @@
       </div>
     </div>
   </footer>
+  </div><!-- end main-content-wrapper -->
 </body>
 </html>
