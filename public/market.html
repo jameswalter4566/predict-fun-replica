@@ -44,8 +44,16 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Page background - gray */
+    /* Page background - gray with ::before pseudo-element */
     .page-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -10;
+    }
+    .page-bg::before {
+      content: "";
+      position: absolute;
+      inset: 0;
       background-color: #E5E7EB;
     }
 

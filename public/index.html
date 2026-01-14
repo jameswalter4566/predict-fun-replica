@@ -54,7 +54,7 @@
     .rounded-container { border-radius: 16px; }
     .rounded-dialog { border-radius: 24px; }
 
-    /* Square dot tile pattern for cards */
+    /* Square dot tile pattern for cards - purple stripe effect */
     .square-dot-tile {
       position: relative;
     }
@@ -65,6 +65,7 @@
       background: url("/images/dot-tile.png") 0px 0px / 12px repeat;
       z-index: 0;
       pointer-events: none;
+      border-radius: inherit;
     }
 
     /* Market card gradient background */
@@ -240,8 +241,16 @@
       z-index: -1;
     }
 
-    /* Page background - gray */
+    /* Page background - gray with ::before pseudo-element */
     .page-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -10;
+    }
+    .page-bg::before {
+      content: "";
+      position: absolute;
+      inset: 0;
       background-color: #E5E7EB;
     }
 
@@ -312,14 +321,18 @@
       opacity: 0.95;
     }
 
-    /* Main content wrapper with white background */
+    /* Main content wrapper - no full white background to show gray edges */
     .main-content-wrapper {
-      background-color: var(--ui-bg);
       position: relative;
     }
 
     /* bg-ui-bg class */
     .bg-ui-bg {
+      background-color: var(--ui-bg);
+    }
+
+    /* Content sections with white background */
+    .content-section {
       background-color: var(--ui-bg);
     }
   </style>
