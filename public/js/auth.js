@@ -6,14 +6,14 @@ const SUPABASE_URL = 'https://bqncfjnigubyictxbliq.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbmNmam5pZ3VieWljdHhibGlxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzY4MDEwNTgsImV4cCI6MjA1MjM3NzA1OH0.GpQsJcKW-UENe7OZnZVkTx_HBvZjVrmbS2F7c8CJDWM'; // Replace with your actual anon key
 
 // Global state
-let supabase = null;
+let supabaseClient = null;
 let currentUser = null;
 let connectedWallet = null;
 
 // Initialize Supabase
 function initSupabase() {
   if (typeof window.supabase !== 'undefined' && window.supabase.createClient) {
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     console.log('Supabase initialized');
     return true;
   }
@@ -95,13 +95,13 @@ async function disconnectWallet() {
 
 // Check if user exists by wallet address
 async function checkUserByWallet(walletAddress) {
-  if (!supabase) {
+  if (!supabaseClient) {
     console.error('Supabase not initialized');
     return null;
   }
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from('users')
       .select('*')
       .eq('wallet_address', walletAddress)
@@ -121,13 +121,13 @@ async function checkUserByWallet(walletAddress) {
 
 // Create user in Supabase
 async function createUser(userData) {
-  if (!supabase) {
+  if (!supabaseClient) {
     console.error('Supabase not initialized');
     return null;
   }
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from('users')
       .insert([userData])
       .select()
@@ -148,7 +148,7 @@ async function createUser(userData) {
 
 // Upload profile photo to Supabase storage
 async function uploadProfilePhoto(file, walletAddress) {
-  if (!supabase) {
+  if (!supabaseClient) {
     console.error('Supabase not initialized');
     return null;
   }
@@ -158,7 +158,7 @@ async function uploadProfilePhoto(file, walletAddress) {
     const fileName = `${walletAddress.substring(0, 8)}-${Date.now()}.${fileExt}`;
     const filePath = `profile-photos/${fileName}`;
 
-    const { data, error } = await supabase.storage
+    const { data, error } = await supabaseClient.storage
       .from('avatars')
       .upload(filePath, file, {
         cacheControl: '3600',
@@ -171,7 +171,7 @@ async function uploadProfilePhoto(file, walletAddress) {
     }
 
     // Get public URL
-    const { data: urlData } = supabase.storage
+    const { data: urlData } = supabaseClient.storage
       .from('avatars')
       .getPublicUrl(filePath);
 
@@ -233,7 +233,7 @@ async function handleProfileSubmit(event) {
     }
 
     // Check if username is already taken
-    const { data: existingUsername } = await supabase
+    const { data: existingUsername } = await supabaseClient
       .from('users')
       .select('id')
       .eq('username', username)
