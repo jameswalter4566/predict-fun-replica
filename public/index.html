@@ -194,9 +194,21 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 8px 12px;
+      padding: 4px;
       border-radius: 12px;
       background: rgba(0, 0, 0, 0.02);
+    }
+
+    /* Market option label with purple border */
+    .option-label {
+      flex: 1;
+      font-size: 14px;
+      padding: 8px 2px 8px 12px;
+      border-radius: 12px;
+      border: 2px solid rgba(110, 87, 249, 0.3);
+      border-bottom-width: 4px;
+      background: white;
+      color: rgb(var(--text-01));
     }
 
     /* Animated pulse for live indicator */
@@ -412,10 +424,11 @@
         </div>
       </div>
 
-      <!-- Markets Section -->
-      <div class="mx-auto max-w-screen-xl px-4 lg:px-8 py-12">
-        <div class="mb-8">
-          <h2 class="font-display text-3xl lg:text-4xl mb-2" style="color: rgb(var(--text-01));">Turn Predictions Into Profits</h2>
+      <!-- Markets Section with white container -->
+      <div class="torn-paper-bottom-light mb-8 bg-ui-bg px-4 lg:px-8 pt-8 pb-12">
+        <div class="mx-auto max-w-screen-xl">
+          <div class="mb-8">
+            <h2 class="font-display text-3xl lg:text-4xl mb-2" style="color: rgb(var(--text-01));">Turn Predictions Into Profits</h2>
           <p class="max-w-2xl" style="color: rgb(var(--text-03));">The BNB-native information market where it pays to be right. Bet on outcomes ranging from sports to politics, and cash in on your correct forecasts.</p>
         </div>
 
@@ -436,19 +449,19 @@
               </div>
               <div class="space-y-2 mb-4">
                 <div class="market-row">
-                  <span class="flex-1 text-sm rounded-button px-3 py-1.5" style="background: white; color: rgb(var(--text-01));">Los Angeles R</span>
+                  <span class="option-label">Los Angeles R</span>
                   <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">65%</span>
                   <button class="btn-yes-sm">YES</button>
                   <button class="btn-no-sm">NO</button>
                 </div>
                 <div class="market-row">
-                  <span class="flex-1 text-sm rounded-button px-3 py-1.5" style="background: white; color: rgb(var(--text-01));">Chicago</span>
+                  <span class="option-label">Chicago</span>
                   <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">37%</span>
                   <button class="btn-yes-sm">YES</button>
                   <button class="btn-no-sm">NO</button>
                 </div>
                 <div class="market-row">
-                  <span class="flex-1 text-sm rounded-button px-3 py-1.5" style="background: white; color: rgb(var(--text-01));">LA R -3.5</span>
+                  <span class="option-label">LA R -3.5</span>
                   <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">54%</span>
                   <button class="btn-yes-sm">YES</button>
                   <button class="btn-no-sm">NO</button>
@@ -486,19 +499,19 @@
               </div>
               <div class="space-y-2 mb-4">
                 <div class="market-row">
-                  <span class="flex-1 text-sm rounded-button px-3 py-1.5" style="background: white; color: rgb(var(--text-01));">Buffalo</span>
+                  <span class="option-label">Buffalo</span>
                   <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">52%</span>
                   <button class="btn-yes-sm">YES</button>
                   <button class="btn-no-sm">NO</button>
                 </div>
                 <div class="market-row">
-                  <span class="flex-1 text-sm rounded-button px-3 py-1.5" style="background: white; color: rgb(var(--text-01));">Denver</span>
+                  <span class="option-label">Denver</span>
                   <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">51%</span>
                   <button class="btn-yes-sm">YES</button>
                   <button class="btn-no-sm">NO</button>
                 </div>
                 <div class="market-row">
-                  <span class="flex-1 text-sm rounded-button px-3 py-1.5" style="background: white; color: rgb(var(--text-01));">DEN -2.5</span>
+                  <span class="option-label">DEN -2.5</span>
                   <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">44%</span>
                   <button class="btn-yes-sm">YES</button>
                   <button class="btn-no-sm">NO</button>
@@ -536,19 +549,19 @@
               </div>
               <div class="space-y-2 mb-4">
                 <div class="market-row">
-                  <span class="flex-1 text-sm rounded-button px-3 py-1.5" style="background: white; color: rgb(var(--text-01));">San Francisco</span>
+                  <span class="option-label">San Francisco</span>
                   <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">24%</span>
                   <button class="btn-yes-sm">YES</button>
                   <button class="btn-no-sm">NO</button>
                 </div>
                 <div class="market-row">
-                  <span class="flex-1 text-sm rounded-button px-3 py-1.5" style="background: white; color: rgb(var(--text-01));">Seattle</span>
+                  <span class="option-label">Seattle</span>
                   <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">75%</span>
                   <button class="btn-yes-sm">YES</button>
                   <button class="btn-no-sm">NO</button>
                 </div>
                 <div class="market-row">
-                  <span class="flex-1 text-sm rounded-button px-3 py-1.5" style="background: white; color: rgb(var(--text-01));">SEA -7.5</span>
+                  <span class="option-label">SEA -7.5</span>
                   <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">48%</span>
                   <button class="btn-yes-sm">YES</button>
                   <button class="btn-no-sm">NO</button>
@@ -586,19 +599,19 @@
               </div>
               <div class="space-y-2 mb-4">
                 <div class="market-row">
-                  <span class="flex-1 text-sm rounded-button px-3 py-1.5" style="background: white; color: rgb(var(--text-01));">Houston</span>
+                  <span class="option-label">Houston</span>
                   <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">40%</span>
                   <button class="btn-yes-sm">YES</button>
                   <button class="btn-no-sm">NO</button>
                 </div>
                 <div class="market-row">
-                  <span class="flex-1 text-sm rounded-button px-3 py-1.5" style="background: white; color: rgb(var(--text-01));">New England</span>
+                  <span class="option-label">New England</span>
                   <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">63%</span>
                   <button class="btn-yes-sm">YES</button>
                   <button class="btn-no-sm">NO</button>
                 </div>
                 <div class="market-row">
-                  <span class="flex-1 text-sm rounded-button px-3 py-1.5" style="background: white; color: rgb(var(--text-01));">NE -3</span>
+                  <span class="option-label">NE -3</span>
                   <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">50%</span>
                   <button class="btn-yes-sm">YES</button>
                   <button class="btn-no-sm">NO</button>
@@ -636,19 +649,19 @@
               </div>
               <div class="space-y-2 mb-4">
                 <div class="market-row">
-                  <span class="flex-1 text-sm rounded-button px-3 py-1.5" style="background: white; color: rgb(var(--text-01));">Los Angeles R</span>
+                  <span class="option-label">Los Angeles R</span>
                   <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">20%</span>
                   <button class="btn-yes-sm">YES</button>
                   <button class="btn-no-sm">NO</button>
                 </div>
                 <div class="market-row">
-                  <span class="flex-1 text-sm rounded-button px-3 py-1.5" style="background: white; color: rgb(var(--text-01));">Seattle</span>
+                  <span class="option-label">Seattle</span>
                   <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">24%</span>
                   <button class="btn-yes-sm">YES</button>
                   <button class="btn-no-sm">NO</button>
                 </div>
                 <div class="market-row">
-                  <span class="flex-1 text-sm rounded-button px-3 py-1.5" style="background: white; color: rgb(var(--text-01));">Buffalo</span>
+                  <span class="option-label">Buffalo</span>
                   <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">14%</span>
                   <button class="btn-yes-sm">YES</button>
                   <button class="btn-no-sm">NO</button>
@@ -711,9 +724,10 @@
           </a>
         </div>
 
-        <!-- View All Markets Button -->
-        <div class="flex justify-center mt-10">
-          <a href="/markets" class="px-6 py-3 rounded-full font-semibold text-white" style="background: rgb(var(--interactive-01));">View All Markets</a>
+          <!-- View All Markets Button -->
+          <div class="flex justify-center mt-10">
+            <a href="/markets" class="px-6 py-3 rounded-full font-semibold text-white" style="background: rgb(var(--interactive-01));">View All Markets</a>
+          </div>
         </div>
       </div>
 
