@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --predict-blue: #5B5FED;
+  --predict-red: #FF6B6B;
+  --predict-bg: #F8F9FC;
+}
+
+body {
+  background-color: var(--predict-bg);
+  font-family: 'Inter', sans-serif;
+}
+
+.font-display {
+  font-family: 'Clash Display', 'Inter', sans-serif;
+  font-weight: 700;
+}
+
+/* Market card styles */
+.market-card {
+  @apply bg-white rounded-2xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow;
+}
+
+.yes-btn {
+  @apply px-3 py-1 rounded-md text-sm font-medium bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors;
+}
+
+.no-btn {
+  @apply px-3 py-1 rounded-md text-sm font-medium bg-red-50 text-red-600 hover:bg-red-100 transition-colors;
+}
+
+/* Torn paper effect */
+.torn-paper {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 1440 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,50 Q30,30 60,50 T120,50 T180,50 T240,50 T300,50 T360,50 T420,50 T480,50 T540,50 T600,50 T660,50 T720,50 T780,50 T840,50 T900,50 T960,50 T1020,50 T1080,50 T1140,50 T1200,50 T1260,50 T1320,50 T1380,50 T1440,50 L1440,100 L0,100 Z' fill='%23F8F9FC'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+}
+
+/* Carousel dots */
+.carousel-dot {
+  @apply w-2 h-2 rounded-full transition-colors;
+}
+
+.carousel-dot.active {
+  @apply bg-blue-600;
+}
+
+.carousel-dot:not(.active) {
+  @apply bg-gray-300;
+}
