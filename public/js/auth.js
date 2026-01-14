@@ -303,9 +303,16 @@ function showInstallPhantomModal() {
 
 // Show profile creation popup
 function showProfileCreationPopup(walletAddress) {
+  console.log('showProfileCreationPopup called with:', walletAddress);
   const popup = document.getElementById('profile-popup');
   if (popup) {
+    // Force remove hidden class and ensure visibility
     popup.classList.remove('hidden');
+    popup.style.display = 'flex';
+    popup.style.opacity = '1';
+    popup.style.visibility = 'visible';
+
+    console.log('Popup classes after remove hidden:', popup.className);
 
     // Store wallet address for form submission
     popup.dataset.walletAddress = walletAddress;
@@ -315,6 +322,8 @@ function showProfileCreationPopup(walletAddress) {
     if (walletInput) {
       walletInput.value = walletAddress;
     }
+  } else {
+    console.error('Profile popup element not found!');
   }
 }
 
