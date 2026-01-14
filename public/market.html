@@ -236,6 +236,28 @@
       cursor: pointer;
     }
 
+    /* Active states for YES/NO toggle */
+    .yes-toggle.active {
+      background-color: rgb(69, 137, 255);
+      color: white;
+      border: none;
+    }
+    .yes-toggle:not(.active) {
+      background-color: transparent;
+      color: rgb(var(--text-01));
+      border: 1px solid rgba(0, 0, 0, 0.08);
+    }
+    .no-toggle.active {
+      background-color: rgb(240, 68, 56);
+      color: white;
+      border: none;
+    }
+    .no-toggle:not(.active) {
+      background-color: transparent;
+      color: rgb(var(--text-01));
+      border: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
     /* Amount buttons */
     .amount-btn {
       display: inline-flex;
@@ -253,6 +275,79 @@
     }
     .amount-btn:hover {
       background-color: rgba(0, 0, 0, 0.02);
+    }
+    .amount-btn.active {
+      background-color: rgb(69, 137, 255);
+      color: white;
+      border-color: rgb(69, 137, 255);
+    }
+
+    /* Sign-in Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s;
+    }
+    .modal-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    .modal-content {
+      background: white;
+      border-radius: 24px;
+      padding: 32px;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+      transform: scale(0.9);
+      transition: transform 0.2s;
+    }
+    .modal-overlay.show .modal-content {
+      transform: scale(1);
+    }
+    .modal-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: rgb(var(--text-01));
+    }
+    .modal-text {
+      color: rgb(var(--text-03));
+      margin-bottom: 24px;
+    }
+    .modal-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      height: 48px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .modal-btn-primary {
+      background: linear-gradient(135deg, #9945FF 0%, #14F195 100%);
+      color: white;
+      border: none;
+    }
+    .modal-btn-primary:hover {
+      opacity: 0.9;
+    }
+    .modal-btn-secondary {
+      background: transparent;
+      color: rgb(var(--text-03));
+      border: 1px solid rgba(0,0,0,0.1);
+      margin-top: 12px;
     }
 
     /* Option row card */
@@ -627,23 +722,26 @@
             <div class="p-4">
               <!-- YES/NO Toggle -->
               <div class="flex gap-2 mb-6">
-                <button class="yes-toggle">YES 65c</button>
-                <button class="no-toggle">NO 36c</button>
+                <button id="yes-toggle-btn" class="yes-toggle active">YES 65c</button>
+                <button id="no-toggle-btn" class="no-toggle">NO 36c</button>
               </div>
 
               <!-- Amount -->
               <div class="mb-6">
                 <div class="flex items-center justify-between mb-3">
                   <span class="text-sm" style="color: rgb(var(--text-03));">Amount</span>
-                  <span class="text-sm" style="color: rgb(var(--text-03));">Balance: $0</span>
+                  <span id="balance-display" class="text-sm" style="color: rgb(var(--text-03));">Balance: $0</span>
                 </div>
-                <div class="text-4xl font-bold text-right mb-3" style="color: rgb(var(--text-01));">$1</div>
+                <div class="flex items-center justify-end mb-3">
+                  <span class="text-4xl font-bold" style="color: rgb(var(--text-01));">$</span>
+                  <input type="number" id="amount-input" class="text-4xl font-bold text-right bg-transparent border-none outline-none w-24" style="color: rgb(var(--text-01));" value="1" min="1" max="10000">
+                </div>
                 <div class="flex gap-2">
-                  <button class="amount-btn">$5</button>
-                  <button class="amount-btn">$10</button>
-                  <button class="amount-btn">$50</button>
-                  <button class="amount-btn">$100</button>
-                  <button class="amount-btn" style="color: rgb(var(--text-03));">MAX</button>
+                  <button class="amount-btn" data-amount="5">$5</button>
+                  <button class="amount-btn" data-amount="10">$10</button>
+                  <button class="amount-btn" data-amount="50">$50</button>
+                  <button class="amount-btn" data-amount="100">$100</button>
+                  <button class="amount-btn" data-amount="max" style="color: rgb(var(--text-03));">MAX</button>
                 </div>
               </div>
 
@@ -653,19 +751,19 @@
                   <span class="text-sm" style="color: rgb(var(--text-03));">To Win</span>
                   <svg class="w-4 h-4" style="color: rgb(var(--text-03));" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </div>
-                <div class="text-xs mb-2" style="color: rgb(var(--text-03));">Avg. Price: 65.0c</div>
-                <div class="text-3xl font-bold" style="color: rgb(42, 165, 26);">$1.52</div>
+                <div id="avg-price" class="text-xs mb-2" style="color: rgb(var(--text-03));">Avg. Price: 65.0c</div>
+                <div id="to-win-amount" class="text-3xl font-bold" style="color: rgb(42, 165, 26);">$1.54</div>
               </div>
 
               <!-- Buy Button -->
-              <button class="btn-buy-yes mb-4">Buy YES</button>
+              <button id="buy-btn" class="btn-buy-yes mb-4">Buy YES</button>
 
               <!-- Estimate -->
               <div class="flex items-center justify-between text-sm">
                 <span style="color: rgb(var(--text-03));">You Get (est.)</span>
                 <div class="flex items-center gap-2">
-                  <span class="font-semibold" style="color: rgb(var(--text-01));">1.52</span>
-                  <span style="color: rgb(42, 165, 26);">YES Shares</span>
+                  <span id="shares-amount" class="font-semibold" style="color: rgb(var(--text-01));">1.54</span>
+                  <span id="shares-type" style="color: rgb(42, 165, 26);">YES Shares</span>
                 </div>
               </div>
             </div>
@@ -693,5 +791,175 @@
     </div>
   </footer>
   </div><!-- end main-content-wrapper -->
+
+  <!-- Sign In Modal -->
+  <div id="signin-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-title">Sign In to Place Bet</div>
+      <p class="modal-text">Connect your Phantom wallet to start trading on prediction markets.</p>
+      <button id="modal-signin-btn" class="modal-btn modal-btn-primary">
+        <svg class="w-5 h-5" viewBox="0 0 128 128" fill="currentColor">
+          <circle cx="64" cy="64" r="64" fill="url(#phantom-gradient)"/>
+          <defs>
+            <linearGradient id="phantom-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#534BB1"/>
+              <stop offset="100%" style="stop-color:#551BF9"/>
+            </linearGradient>
+          </defs>
+          <path d="M110.584 64.9142H99.142C99.142 41.7651 80.173 23 56.7724 23C33.6612 23 14.8716 41.3057 14.4118 64.0583C13.936 87.5169 35.1858 108 58.8862 108H64.4375C85.4561 108 110.584 89.1507 110.584 64.9142Z" fill="white"/>
+          <ellipse cx="44.5" cy="58.5" rx="7.5" ry="8.5" fill="#534BB1"/>
+          <ellipse cx="70.5" cy="58.5" rx="7.5" ry="8.5" fill="#534BB1"/>
+        </svg>
+        Connect Phantom Wallet
+      </button>
+      <button id="modal-close-btn" class="modal-btn modal-btn-secondary">Cancel</button>
+    </div>
+  </div>
+
+  <script>
+    // Market betting panel interactivity
+    document.addEventListener('DOMContentLoaded', function() {
+      // State
+      let selectedSide = 'yes';
+      let amount = 1;
+      const yesPrice = 0.65;
+      const noPrice = 0.36;
+
+      // Elements
+      const yesToggle = document.getElementById('yes-toggle-btn');
+      const noToggle = document.getElementById('no-toggle-btn');
+      const amountInput = document.getElementById('amount-input');
+      const amountBtns = document.querySelectorAll('.amount-btn');
+      const buyBtn = document.getElementById('buy-btn');
+      const toWinAmount = document.getElementById('to-win-amount');
+      const sharesAmount = document.getElementById('shares-amount');
+      const sharesType = document.getElementById('shares-type');
+      const avgPrice = document.getElementById('avg-price');
+      const modal = document.getElementById('signin-modal');
+      const modalSigninBtn = document.getElementById('modal-signin-btn');
+      const modalCloseBtn = document.getElementById('modal-close-btn');
+
+      // Update calculations
+      function updateCalculations() {
+        const price = selectedSide === 'yes' ? yesPrice : noPrice;
+        const shares = amount / price;
+        const toWin = shares;
+
+        toWinAmount.textContent = '$' + toWin.toFixed(2);
+        sharesAmount.textContent = toWin.toFixed(2);
+        sharesType.textContent = selectedSide.toUpperCase() + ' Shares';
+        avgPrice.textContent = 'Avg. Price: ' + (price * 100).toFixed(1) + 'c';
+
+        // Update button text and color
+        buyBtn.textContent = 'Buy ' + selectedSide.toUpperCase();
+        if (selectedSide === 'yes') {
+          buyBtn.style.background = 'rgb(69, 137, 255)';
+          toWinAmount.style.color = 'rgb(42, 165, 26)';
+          sharesType.style.color = 'rgb(42, 165, 26)';
+        } else {
+          buyBtn.style.background = 'rgb(240, 68, 56)';
+          toWinAmount.style.color = 'rgb(240, 68, 56)';
+          sharesType.style.color = 'rgb(240, 68, 56)';
+        }
+      }
+
+      // YES/NO toggle
+      yesToggle.addEventListener('click', function() {
+        selectedSide = 'yes';
+        yesToggle.classList.add('active');
+        noToggle.classList.remove('active');
+        updateCalculations();
+      });
+
+      noToggle.addEventListener('click', function() {
+        selectedSide = 'no';
+        noToggle.classList.add('active');
+        yesToggle.classList.remove('active');
+        updateCalculations();
+      });
+
+      // Amount input
+      amountInput.addEventListener('input', function() {
+        amount = parseFloat(this.value) || 1;
+        if (amount < 1) amount = 1;
+        if (amount > 10000) amount = 10000;
+        updateCalculations();
+        // Clear active state from preset buttons
+        amountBtns.forEach(btn => btn.classList.remove('active'));
+      });
+
+      // Amount preset buttons
+      amountBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const val = this.dataset.amount;
+          if (val === 'max') {
+            amount = 1000; // Example max
+          } else {
+            amount = parseInt(val);
+          }
+          amountInput.value = amount;
+          updateCalculations();
+          // Update active state
+          amountBtns.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+
+      // Buy button - check if logged in
+      buyBtn.addEventListener('click', function() {
+        // Check if user is logged in (Phantom wallet connected)
+        const isLoggedIn = window.phantom?.solana?.isConnected || false;
+
+        if (!isLoggedIn) {
+          // Show sign-in modal
+          modal.classList.add('show');
+        } else {
+          // User is logged in - would place bet here
+          alert('Placing ' + selectedSide.toUpperCase() + ' bet for $' + amount);
+        }
+      });
+
+      // Modal close
+      modalCloseBtn.addEventListener('click', function() {
+        modal.classList.remove('show');
+      });
+
+      // Modal sign in - trigger Phantom connection
+      modalSigninBtn.addEventListener('click', async function() {
+        modal.classList.remove('show');
+        if (window.phantom?.solana) {
+          try {
+            await window.phantom.solana.connect();
+            // Refresh page or update UI
+            location.reload();
+          } catch (err) {
+            console.error('Failed to connect:', err);
+          }
+        } else {
+          window.open('https://phantom.app/', '_blank');
+        }
+      });
+
+      // Close modal on overlay click
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          modal.classList.remove('show');
+        }
+      });
+
+      // Also make the Yes/No price buttons in market options trigger sign-in
+      document.querySelectorAll('.btn-yes-price, .btn-no-price').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const isLoggedIn = window.phantom?.solana?.isConnected || false;
+          if (!isLoggedIn) {
+            modal.classList.add('show');
+          }
+        });
+      });
+
+      // Initialize
+      updateCalculations();
+    });
+  </script>
 </body>
 </html>
