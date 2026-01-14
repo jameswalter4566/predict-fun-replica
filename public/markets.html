@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markets | Predict</title>
+  <link rel="stylesheet" href="https://predict.fun/_next/static/css/70609b1a93ff2867.css">
+  <style>
+    /* Root CSS Variables - exact match from predict.fun */
+    :root {
+      --ui-bg: #ffffff;
+      --text-01: 31 42 55;
+      --text-02: 56 66 80;
+      --text-03: 108 115 127;
+      --text-disabled: 157 164 174;
+      --border-01: #00000014;
+      --interactive-01: 17 25 39;
+      --interactive-02: #00000014;
+      --interactive-03: 110 87 249;
+      --accent-green: 42 165 26;
+      --accent-green-subtle: 233 255 230;
+      --accent-red: 240 68 56;
+      --accent-red-subtle: #fa4d561a;
+      --neg-bg: 240 68 56;
+      --neg-subtle: #fa4d561a;
+      --pos-bg: 69 137 255;
+      --pos-subtle: #4589ff1a;
+      --field-01: #00000014;
+      --focus: #a56eff;
+      --hover-ui: #0000000a;
+    }
+
+    html {
+      font-family: Geist, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --tw-numeric-figure: lining-nums;
+      --tw-numeric-spacing: tabular-nums;
+    }
+
+    body {
+      background-color: var(--ui-bg);
+      color: rgb(var(--text-01));
+      margin: 0;
+      line-height: inherit;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .font-display {
+      font-family: 'Gooper', Georgia, serif;
+      font-weight: 700;
+    }
+
+    /* Border radius classes - exact values */
+    .rounded-button { border-radius: 12px; }
+    .rounded-container { border-radius: 16px; }
+    .rounded-dialog { border-radius: 24px; }
+
+    /* Square dot tile pattern for cards */
+    .square-dot-tile {
+      position: relative;
+    }
+    .square-dot-tile::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: url("/images/dot-tile.png") 0px 0px / 12px repeat;
+      z-index: 0;
+      pointer-events: none;
+      border-radius: inherit;
+    }
+
+    /* Market card gradient background */
+    .market-card {
+      background: linear-gradient(rgb(244, 243, 255), rgb(255, 255, 255));
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 24px;
+      overflow: hidden;
+    }
+
+    /* Small YES/NO buttons in market rows */
+    .btn-yes-sm {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+      height: 32px;
+      padding: 0 12px;
+      border-radius: 12px;
+      border: 2px solid rgba(42, 165, 26, 0.7);
+      border-bottom-width: 4px;
+      background-color: rgb(233, 255, 230);
+      color: rgb(42, 165, 26);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn-no-sm {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+      height: 32px;
+      padding: 0 12px;
+      border-radius: 12px;
+      border: 2px solid rgba(240, 68, 56, 0.7);
+      border-bottom-width: 4px;
+      background-color: rgba(250, 77, 86, 0.1);
+      color: rgb(240, 68, 56);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    /* Market row styling */
+    .market-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.02);
+    }
+
+    /* Market option label with purple border */
+    .option-label {
+      flex: 1;
+      font-size: 14px;
+      padding: 8px 2px 8px 12px;
+      border-radius: 12px;
+      border: 2px solid rgba(110, 87, 249, 0.3);
+      border-bottom-width: 4px;
+      background: white;
+      color: rgb(var(--text-01));
+    }
+
+    /* Card content z-index */
+    .card-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Icon button */
+    .icon-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      color: rgb(var(--text-03));
+    }
+    .icon-btn:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    /* Page background */
+    .page-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -10;
+    }
+    .page-bg::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-color: #E5E7EB;
+    }
+
+    /* Shadow styles for market cards */
+    .shadow-purple-subtle {
+      box-shadow: 0 1px 2px 0 rgba(132, 86, 247, 0.12);
+    }
+    .shadow-purple-subtle:hover {
+      box-shadow: 0 2px 4px 0 rgba(132, 86, 247, 0.15);
+    }
+
+    /* Log In button */
+    .btn-login {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+      height: 32px;
+      padding: 0 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      background-color: transparent;
+      color: rgb(31, 42, 55);
+      cursor: pointer;
+    }
+
+    /* Sign Up button */
+    .btn-signup {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+      height: 32px;
+      padding: 0 12px;
+      border-radius: 12px;
+      border: none;
+      background-color: rgb(17, 25, 39);
+      color: white;
+      cursor: pointer;
+    }
+
+    .bg-ui-bg {
+      background-color: var(--ui-bg);
+    }
+
+    /* Filter tab styling */
+    .filter-tab {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 16px;
+      border-radius: 9999px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      border: none;
+      background: transparent;
+      color: rgb(var(--text-02));
+    }
+    .filter-tab:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+    .filter-tab.active {
+      background: rgb(var(--interactive-03));
+      color: white;
+    }
+
+    /* Filters button */
+    .filters-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 9999px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      background: white;
+      color: rgb(var(--text-01));
+    }
+
+    /* Dropdown select styling */
+    .dropdown-select {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 9999px;
+      font-size: 14px;
+      cursor: pointer;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      background: white;
+      color: rgb(var(--text-03));
+    }
+    .dropdown-select span {
+      color: rgb(var(--text-01));
+      font-weight: 500;
+    }
+
+    /* Points badge */
+    .badge-points {
+      background: rgb(254, 240, 138);
+      color: rgb(113, 63, 18);
+    }
+  </style>
+</head>
+<body class="min-h-dvh antialiased">
+  <!-- Page background with topographic pattern -->
+  <div class="page-bg fixed inset-0 -z-10">
+    <img src="/images/background.jpg" alt="" class="mix-blend-multiply w-full h-full object-cover">
+  </div>
+
+  <!-- Main content wrapper -->
+  <div class="main-content-wrapper">
+    <!-- Header -->
+    <header class="bg-ui-bg border-b" style="border-color: rgba(0,0,0,0.08);">
+      <div class="mx-auto max-w-screen-xl px-4 lg:px-8">
+        <nav class="flex items-center justify-between h-14">
+          <!-- Left side - Logo and Nav -->
+          <div class="flex items-center gap-6">
+            <a href="/" class="flex items-center">
+              <span class="text-xl font-semibold" style="color: rgb(var(--text-01));">predict</span>
+              <span class="text-xs ml-1 px-1.5 py-0.5 rounded" style="color: rgb(var(--text-03));">beta</span>
+            </a>
+            <div class="hidden md:flex items-center gap-4">
+              <a href="/markets" class="text-sm font-medium" style="color: rgb(var(--interactive-03));">Markets</a>
+              <a href="#" class="text-sm px-3 py-1 rounded-full badge-points font-medium">Points</a>
+              <a href="#" class="text-sm" style="color: rgb(var(--text-02));">Invite</a>
+            </div>
+          </div>
+
+          <!-- Right side - Search and Auth -->
+          <div class="flex items-center gap-3">
+            <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full" style="background: rgba(0,0,0,0.05);">
+              <svg class="w-4 h-4" style="color: rgb(var(--text-03));" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+              </svg>
+              <span class="text-sm" style="color: rgb(var(--text-03));">Search markets...</span>
+              <span class="text-xs px-1.5 py-0.5 rounded" style="background: rgba(0,0,0,0.08); color: rgb(var(--text-03));">Shift + /</span>
+            </div>
+            <button class="btn-login">Log In</button>
+            <button class="btn-signup">Sign Up</button>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Markets Page Content -->
+    <div class="bg-ui-bg min-h-screen">
+      <div class="mx-auto max-w-screen-xl px-4 lg:px-8 py-8">
+        <!-- Page Title -->
+        <div class="mb-6">
+          <h1 class="font-display text-4xl mb-2" style="color: rgb(var(--text-01));">Markets</h1>
+          <p style="color: rgb(var(--text-03));">Put your money where your mouth is and bet on future outcomes on BNB's favorite prediction market.</p>
+        </div>
+
+        <!-- Filters Row -->
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+          <div class="flex items-center gap-2">
+            <button class="filters-btn">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+              </svg>
+              Filters
+            </button>
+            <button class="filter-tab active">All</button>
+            <button class="filter-tab">Politics</button>
+            <button class="filter-tab">Crypto</button>
+            <button class="filter-tab">New</button>
+            <button class="filter-tab">More <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></button>
+          </div>
+          <div class="flex items-center gap-3">
+            <button class="dropdown-select">
+              Status: <span>Open</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <button class="dropdown-select">
+              Sort: <span>Popular</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Markets Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- Market Card 1 - Los Angeles R at Chicago -->
+          <a href="/market.html" class="square-dot-tile market-card shadow-purple-subtle block">
+            <div class="card-content p-4">
+              <div class="flex items-start justify-between gap-3 mb-4">
+                <div class="flex items-start gap-3">
+                  <img src="/images/la-rams.png" alt="LA Rams" class="w-10 h-10 rounded-xl object-cover">
+                  <h3 class="font-semibold text-sm" style="color: rgb(var(--text-01));">Los Angeles R at Chicago</h3>
+                </div>
+                <div class="flex gap-1">
+                  <button class="icon-btn"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg></button>
+                  <button class="icon-btn"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                </div>
+              </div>
+              <div class="space-y-2 mb-4">
+                <div class="market-row">
+                  <span class="option-label">Los Angeles R</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">65%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+                <div class="market-row">
+                  <span class="option-label">Chicago</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">37%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+                <div class="market-row">
+                  <span class="option-label">LA R -3.5</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">53%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+              </div>
+              <div class="flex items-center justify-between pt-3 border-t" style="border-color: rgba(0,0,0,0.06);">
+                <div class="flex items-center gap-2">
+                  <div class="flex -space-x-1.5">
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #f97316;"></div>
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #eab308;"></div>
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #22c55e;"></div>
+                  </div>
+                  <span class="text-xs" style="color: rgb(var(--text-03));">+35</span>
+                </div>
+                <div class="flex items-center gap-3 text-xs" style="color: rgb(var(--text-03));">
+                  <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg> $1,208</span>
+                  <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg> Jan 18</span>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <!-- Market Card 2 - Buffalo at Denver -->
+          <a href="/market.html" class="square-dot-tile market-card shadow-purple-subtle block">
+            <div class="card-content p-4">
+              <div class="flex items-start justify-between gap-3 mb-4">
+                <div class="flex items-start gap-3">
+                  <img src="/images/buffalo.png" alt="Buffalo Bills" class="w-10 h-10 rounded-xl object-cover">
+                  <h3 class="font-semibold text-sm" style="color: rgb(var(--text-01));">Buffalo at Denver</h3>
+                </div>
+                <div class="flex gap-1">
+                  <button class="icon-btn"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg></button>
+                  <button class="icon-btn"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                </div>
+              </div>
+              <div class="space-y-2 mb-4">
+                <div class="market-row">
+                  <span class="option-label">Buffalo</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">49%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+                <div class="market-row">
+                  <span class="option-label">Denver</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">51%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+                <div class="market-row">
+                  <span class="option-label">DEN -2.5</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">44%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+              </div>
+              <div class="flex items-center justify-between pt-3 border-t" style="border-color: rgba(0,0,0,0.06);">
+                <div class="flex items-center gap-2">
+                  <div class="flex -space-x-1.5">
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #f97316;"></div>
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #eab308;"></div>
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #22c55e;"></div>
+                  </div>
+                  <span class="text-xs" style="color: rgb(var(--text-03));">+28</span>
+                </div>
+                <div class="flex items-center gap-3 text-xs" style="color: rgb(var(--text-03));">
+                  <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg> $5,475</span>
+                  <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg> Jan 17</span>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <!-- Market Card 3 - San Francisco at Seattle -->
+          <a href="/market.html" class="square-dot-tile market-card shadow-purple-subtle block">
+            <div class="card-content p-4">
+              <div class="flex items-start justify-between gap-3 mb-4">
+                <div class="flex items-start gap-3">
+                  <img src="/images/sf-49ers.png" alt="San Francisco 49ers" class="w-10 h-10 rounded-xl object-cover">
+                  <h3 class="font-semibold text-sm" style="color: rgb(var(--text-01));">San Francisco at Seattle</h3>
+                </div>
+                <div class="flex gap-1">
+                  <button class="icon-btn"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg></button>
+                  <button class="icon-btn"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                </div>
+              </div>
+              <div class="space-y-2 mb-4">
+                <div class="market-row">
+                  <span class="option-label">San Francisco</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">24%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+                <div class="market-row">
+                  <span class="option-label">Seattle</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">76%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+                <div class="market-row">
+                  <span class="option-label">SEA -7.5</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">49%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+              </div>
+              <div class="flex items-center justify-between pt-3 border-t" style="border-color: rgba(0,0,0,0.06);">
+                <div class="flex items-center gap-2">
+                  <div class="flex -space-x-1.5">
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #f97316;"></div>
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #eab308;"></div>
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #22c55e;"></div>
+                  </div>
+                  <span class="text-xs" style="color: rgb(var(--text-03));">+21</span>
+                </div>
+                <div class="flex items-center gap-3 text-xs" style="color: rgb(var(--text-03));">
+                  <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg> $523</span>
+                  <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg> Jan 17</span>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <!-- Market Card 4 - Houston at New England -->
+          <a href="/market.html" class="square-dot-tile market-card shadow-purple-subtle block">
+            <div class="card-content p-4">
+              <div class="flex items-start justify-between gap-3 mb-4">
+                <div class="flex items-start gap-3">
+                  <img src="/images/houston.png" alt="Houston Texans" class="w-10 h-10 rounded-xl object-cover">
+                  <h3 class="font-semibold text-sm" style="color: rgb(var(--text-01));">Houston at New England</h3>
+                </div>
+                <div class="flex gap-1">
+                  <button class="icon-btn"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg></button>
+                  <button class="icon-btn"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                </div>
+              </div>
+              <div class="space-y-2 mb-4">
+                <div class="market-row">
+                  <span class="option-label">Houston</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">39%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+                <div class="market-row">
+                  <span class="option-label">New England</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">63%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+                <div class="market-row">
+                  <span class="option-label">NE -3.5</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">45%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+              </div>
+              <div class="flex items-center justify-between pt-3 border-t" style="border-color: rgba(0,0,0,0.06);">
+                <div class="flex items-center gap-2">
+                  <div class="flex -space-x-1.5">
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #f97316;"></div>
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #eab308;"></div>
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #22c55e;"></div>
+                  </div>
+                  <span class="text-xs" style="color: rgb(var(--text-03));">+17</span>
+                </div>
+                <div class="flex items-center gap-3 text-xs" style="color: rgb(var(--text-03));">
+                  <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg> $1,065</span>
+                  <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg> Jan 18</span>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <!-- Market Card 5 - Super Bowl Champion 2026 -->
+          <a href="/market.html" class="square-dot-tile market-card shadow-purple-subtle block">
+            <div class="card-content p-4">
+              <div class="flex items-start justify-between gap-3 mb-4">
+                <div class="flex items-start gap-3">
+                  <img src="/images/superbowl.png" alt="Super Bowl" class="w-10 h-10 rounded-xl object-cover">
+                  <h3 class="font-semibold text-sm" style="color: rgb(var(--text-01));">Super Bowl Champion 2026</h3>
+                </div>
+                <div class="flex gap-1">
+                  <button class="icon-btn"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg></button>
+                  <button class="icon-btn"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                </div>
+              </div>
+              <div class="space-y-2 mb-4">
+                <div class="market-row">
+                  <span class="option-label">Los Angeles R</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">22%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+                <div class="market-row">
+                  <span class="option-label">Seattle</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">24%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+                <div class="market-row">
+                  <span class="option-label">Buffalo</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">14%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+              </div>
+              <div class="flex items-center justify-between pt-3 border-t" style="border-color: rgba(0,0,0,0.06);">
+                <div class="flex items-center gap-2">
+                  <div class="flex -space-x-1.5">
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #f97316;"></div>
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #eab308;"></div>
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #22c55e;"></div>
+                  </div>
+                  <span class="text-xs" style="color: rgb(var(--text-03));">+2K</span>
+                </div>
+                <div class="flex items-center gap-3 text-xs" style="color: rgb(var(--text-03));">
+                  <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg> $6,340,829</span>
+                  <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg> Feb 8</span>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <!-- Market Card 6 - Will Logan Paul's PSA 10 Pokemon -->
+          <a href="/market.html" class="square-dot-tile market-card shadow-purple-subtle block">
+            <div class="card-content p-4">
+              <div class="flex items-start justify-between gap-3 mb-4">
+                <div class="flex items-start gap-3">
+                  <img src="/images/pokemon-card.png" alt="Pokemon Card" class="w-10 h-10 rounded-xl object-cover">
+                  <h3 class="font-semibold text-sm" style="color: rgb(var(--text-01));">Will Logan Paul's PSA 10 Pokemon Illustrator Sale Price be over $6 million?</h3>
+                </div>
+                <div class="flex gap-1">
+                  <button class="icon-btn"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg></button>
+                  <button class="icon-btn"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                </div>
+              </div>
+              <div class="mb-4">
+                <div class="flex justify-between text-sm mb-2">
+                  <span style="color: rgb(var(--interactive-03));">99%</span>
+                  <span style="color: rgb(var(--accent-red));">1%</span>
+                </div>
+                <div class="h-2 rounded-full overflow-hidden" style="background: rgba(240, 68, 56, 0.2);">
+                  <div class="h-full rounded-full" style="width: 99%; background: rgb(var(--interactive-03));"></div>
+                </div>
+              </div>
+              <div class="flex gap-2 mb-4">
+                <button class="flex-1 py-2 rounded-button text-sm font-semibold" style="border: 2px solid rgba(42, 165, 26, 0.7); border-bottom-width: 4px; background: rgb(233, 255, 230); color: rgb(42, 165, 26);">YES 99.0c</button>
+                <button class="flex-1 py-2 rounded-button text-sm font-semibold" style="border: 2px solid rgba(240, 68, 56, 0.7); border-bottom-width: 4px; background: rgba(250, 77, 86, 0.1); color: rgb(240, 68, 56);">NO 1.1c</button>
+              </div>
+              <div class="flex items-center justify-between pt-3 border-t" style="border-color: rgba(0,0,0,0.06);">
+                <div class="flex items-center gap-2">
+                  <div class="flex -space-x-1.5">
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #f97316;"></div>
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #eab308;"></div>
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #22c55e;"></div>
+                  </div>
+                  <span class="text-xs" style="color: rgb(var(--text-03));">+1.8K</span>
+                </div>
+                <div class="flex items-center gap-3 text-xs" style="color: rgb(var(--text-03));">
+                  <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg> $7,598,151</span>
+                  <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg> Feb 28</span>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <!-- Market Card 7 - Will Gold be above $4,400 -->
+          <a href="/market.html" class="square-dot-tile market-card shadow-purple-subtle block">
+            <div class="card-content p-4">
+              <div class="flex items-start justify-between gap-3 mb-4">
+                <div class="flex items-start gap-3">
+                  <img src="/images/gold.png" alt="Gold" class="w-10 h-10 rounded-xl object-cover">
+                  <h3 class="font-semibold text-sm" style="color: rgb(var(--text-01));">Will Gold be above $4,400 on January 30th, 2026?</h3>
+                </div>
+                <div class="flex gap-1">
+                  <button class="icon-btn"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg></button>
+                  <button class="icon-btn"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                </div>
+              </div>
+              <div class="mb-4">
+                <div class="flex justify-between text-sm mb-2">
+                  <span style="color: rgb(var(--interactive-03));">45%</span>
+                  <span style="color: rgb(var(--accent-red));">55%</span>
+                </div>
+                <div class="h-2 rounded-full overflow-hidden" style="background: rgba(240, 68, 56, 0.2);">
+                  <div class="h-full rounded-full" style="width: 45%; background: rgb(var(--interactive-03));"></div>
+                </div>
+              </div>
+              <div class="flex gap-2 mb-4">
+                <button class="flex-1 py-2 rounded-button text-sm font-semibold" style="border: 2px solid rgba(42, 165, 26, 0.7); border-bottom-width: 4px; background: rgb(233, 255, 230); color: rgb(42, 165, 26);">YES 45c</button>
+                <button class="flex-1 py-2 rounded-button text-sm font-semibold" style="border: 2px solid rgba(240, 68, 56, 0.7); border-bottom-width: 4px; background: rgba(250, 77, 86, 0.1); color: rgb(240, 68, 56);">NO 55c</button>
+              </div>
+              <div class="flex items-center justify-between pt-3 border-t" style="border-color: rgba(0,0,0,0.06);">
+                <div class="flex items-center gap-2">
+                  <div class="flex -space-x-1.5">
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #f97316;"></div>
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #eab308;"></div>
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #22c55e;"></div>
+                  </div>
+                  <span class="text-xs" style="color: rgb(var(--text-03));">+124</span>
+                </div>
+                <div class="flex items-center gap-3 text-xs" style="color: rgb(var(--text-03));">
+                  <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg> $52,341</span>
+                  <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg> Jan 30</span>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <!-- Market Card 8 - 2026 NBA Champion -->
+          <a href="/market.html" class="square-dot-tile market-card shadow-purple-subtle block">
+            <div class="card-content p-4">
+              <div class="flex items-start justify-between gap-3 mb-4">
+                <div class="flex items-start gap-3">
+                  <img src="/images/nba.png" alt="NBA" class="w-10 h-10 rounded-xl object-cover">
+                  <h3 class="font-semibold text-sm" style="color: rgb(var(--text-01));">2026 NBA Champion</h3>
+                </div>
+                <div class="flex gap-1">
+                  <button class="icon-btn"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg></button>
+                  <button class="icon-btn"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                </div>
+              </div>
+              <div class="space-y-2 mb-4">
+                <div class="market-row">
+                  <span class="option-label">Oklahoma City Thu</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">40%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+                <div class="market-row">
+                  <span class="option-label">Boston Celtics</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">25%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+                <div class="market-row">
+                  <span class="option-label">Cleveland Cavaliers</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">12%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+              </div>
+              <div class="flex items-center justify-between pt-3 border-t" style="border-color: rgba(0,0,0,0.06);">
+                <div class="flex items-center gap-2">
+                  <div class="flex -space-x-1.5">
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #f97316;"></div>
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #eab308;"></div>
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #22c55e;"></div>
+                  </div>
+                  <span class="text-xs" style="color: rgb(var(--text-03));">+892</span>
+                </div>
+                <div class="flex items-center gap-3 text-xs" style="color: rgb(var(--text-03));">
+                  <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg> $1,234,567</span>
+                  <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg> Jun 15</span>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <!-- Market Card 9 - English Premier League Winner -->
+          <a href="/market.html" class="square-dot-tile market-card shadow-purple-subtle block">
+            <div class="card-content p-4">
+              <div class="flex items-start justify-between gap-3 mb-4">
+                <div class="flex items-start gap-3">
+                  <img src="/images/epl.png" alt="EPL" class="w-10 h-10 rounded-xl object-cover">
+                  <h3 class="font-semibold text-sm" style="color: rgb(var(--text-01));">English Premier League Winner</h3>
+                </div>
+                <div class="flex gap-1">
+                  <button class="icon-btn"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg></button>
+                  <button class="icon-btn"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg></button>
+                </div>
+              </div>
+              <div class="space-y-2 mb-4">
+                <div class="market-row">
+                  <span class="option-label">Man City</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">19.6%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+                <div class="market-row">
+                  <span class="option-label">Liverpool</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">55%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+                <div class="market-row">
+                  <span class="option-label">Arsenal</span>
+                  <span class="text-sm font-semibold w-12 text-right" style="color: rgb(var(--text-01));">18%</span>
+                  <button class="btn-yes-sm">YES</button>
+                  <button class="btn-no-sm">NO</button>
+                </div>
+              </div>
+              <div class="flex items-center justify-between pt-3 border-t" style="border-color: rgba(0,0,0,0.06);">
+                <div class="flex items-center gap-2">
+                  <div class="flex -space-x-1.5">
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #f97316;"></div>
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #eab308;"></div>
+                    <div class="w-5 h-5 rounded-full border-2 border-white" style="background: #22c55e;"></div>
+                  </div>
+                  <span class="text-xs" style="color: rgb(var(--text-03));">+456</span>
+                </div>
+                <div class="flex items-center gap-3 text-xs" style="color: rgb(var(--text-03));">
+                  <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg> $892,145</span>
+                  <span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg> May 25</span>
+                </div>
+              </div>
+            </div>
+          </a>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
